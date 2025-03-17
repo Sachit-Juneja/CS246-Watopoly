@@ -1,0 +1,40 @@
+1. Plan of Attack
+1.1 Overall Strategy
+Our main goal is to ensure that we always have a working build as we add features. We will start by implementing the most critical and straightforward core features, then gradually layer in more complex ones. The order of features is based on the priorities suggested in the specification (“If Things Go Wrong” section in watopoly.pdf).
+
+Board & Basic Turn Mechanics (High Priority)
+
+Create data structures for the board, squares, and players.
+Implement the ability to roll dice (in both normal and testing mode) and move a player token accordingly.
+Handle collecting OSAP ($200) if crossing the start position.
+Ensure the game can continue in a loop from one player’s turn to the next.
+Buying Properties & Paying Rent
+
+Create property classes (AcademicBuilding, Residence, Gym) and logic for ownership.
+On landing, handle whether a property is unowned (option to purchase or auction) or is owned by someone else (pay rent).
+Money Management & Bankruptcy
+
+Deduct money for rent, handle bankruptcy if a player cannot pay.
+Transfer property ownership on bankruptcy as required.
+Saving / Loading Games
+
+Parse a save file to reconstruct the game state.
+Output to a save file so the current game can be resumed later.
+Special Squares (SLC, Needles Hall, DC Tims Line, Go To Tims, etc.)
+
+SLC and Needles Hall random effects (especially including the rare “Roll Up the Rim Cup” logic).
+The DC Tims Line logic (rolling doubles, paying $50, or using a Rim Cup to get out).
+Tuition square (flat $300 vs. 10% net worth).
+Coop Fee, Goose Nesting, etc.
+Improvements & Mortgaging
+
+Academic buildings can buy/sell improvements (bathrooms/cafeteria).
+Properties can be mortgaged/unmortgaged.
+Trading & Auctions
+
+Command to trade money or properties with another player.
+If a property is refused by the original player or reverts to the bank, implement an auction process.
+Polish & Testing
+
+Expand any remaining details such as advanced command-line options and any design refinements.
+Thoroughly test the overall flow before final submission.
