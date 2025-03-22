@@ -2,16 +2,21 @@
 #define PLAYER_H
 
 #include <string>
-
+#include <vector>
+class Board;
 class Player {
 
     std::string name;
+    char icon;
     int currentPosition = 0;
     int money = 1500;
+
+    friend class Board; 
     
     public:
-        Player(std::string name); // Constructor
-        
+        // static std::vector<char> players; 
+
+        Player(int character); // Constructor
         void setPosition(int building);
         int getPosition(); 
   
@@ -25,7 +30,7 @@ class Player {
         // Adds or removes money from the player
         // Returns: New amount of money in player after calculations.
         int addMoney(int amount); 
-        
+
         int getMoney();
 };
 
