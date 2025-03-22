@@ -9,19 +9,20 @@ using namespace std;
 
 class Player; //forward declaration
 
-class Building{
+class Buildings{
     protected:
-        vector<Player *> currentPlayers;//-> uncomment once Player class is done. 
-        int position; // to track current position in board.
+        const int POS; // to track current position in board. (number between 0 - 39)
         string building_name;
+        vector<Player *> currentPlayers;//-> uncomment once Player class is done. in Public so that Board class can access it
 
     public:
+        // when board class is implemented move currentPlayers to protected section and add friend class Board;
         virtual void addPlayer(Player *p) = 0;
         virtual void removePlayer(Player *p) = 0;
         virtual vector<Player*> getCurrentPlayer() = 0;
         virtual void event(Player *p) = 0; // handles the response of the square(building when p lands on it).
-        Building(string &name, int pos);
-        virtual ~Building() = default; 
+        Buildings(string &name, int pos);
+        virtual ~Buildings() = default; 
 };
 
 #endif

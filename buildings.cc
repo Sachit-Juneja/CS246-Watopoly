@@ -1,4 +1,4 @@
 #include "buildings.h"
 
-Building::Building(string &name, int pos): building_name{name}, position{pos} {}
+Buildings::Buildings(string &name, int pos): building_name{name}, POS{pos} {}
 
