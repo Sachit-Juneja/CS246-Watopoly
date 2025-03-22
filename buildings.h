@@ -14,3 +14,5 @@ class Building{
         virtual void getCurrentPlayer() = 0;
         virtual void event() = 0;
 };
+
+#endif
