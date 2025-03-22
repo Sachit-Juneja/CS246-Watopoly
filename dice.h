@@ -21,3 +21,6 @@ public:
 };
 
 #endif // DICE_H
+
+// To run dicetest.cc, use command
+// g++20 dice-impl.cc dicetest.cc -o dice
