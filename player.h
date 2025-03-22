@@ -25,6 +25,8 @@ class Player {
         // Adds or removes money from the player
         // Returns: New amount of money in player after calculations.
         int addMoney(int amount); 
+        
+        int getMoney();
 };
 
 #endif

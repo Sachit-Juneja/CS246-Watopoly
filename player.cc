@@ -30,3 +30,7 @@ int Player::addMoney(int amount) {
     return money; 
 }
 
+int Player::getMoney() {
+    return money;
+}
+
