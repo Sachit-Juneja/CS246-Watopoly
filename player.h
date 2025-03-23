@@ -3,7 +3,8 @@
 
 #include <string>
 #include <vector>
-class Board;
+class Board; // forward declaration
+
 class Player {
 
     std::string name;
