@@ -18,7 +18,7 @@ class Buildings{
 
         public:
         // Constructor
-        Buildings(string &name, int pos);
+        Buildings(string name, int pos);
     
         // Adds a player to the building
         virtual void addPlayer(Player *p);

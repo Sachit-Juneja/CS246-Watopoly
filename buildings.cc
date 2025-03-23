@@ -1,7 +1,7 @@
 #include "buildings.h"
 
 // Constructor: Initializes building name and position
-Buildings::Buildings(string &name, int pos) : building_name{name}, POS{pos} {}
+Buildings::Buildings(string name, int pos) : building_name{name}, POS{pos} {}
 
 // Adds a player to the currentPlayers vector
 void Buildings::addPlayer(Player *p) {
