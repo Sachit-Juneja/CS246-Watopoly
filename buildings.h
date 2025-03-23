@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 using namespace std;
 // #include "players.h" -> commented out for now, will be added once Austin is done with Players.
 
@@ -15,14 +16,23 @@ class Buildings{
         string building_name;
         vector<Player *> currentPlayers;//-> uncomment once Player class is done. in Public so that Board class can access it
 
-    public:
-        // when board class is implemented move currentPlayers to protected section and add friend class Board;
-        virtual void addPlayer(Player *p) = 0;
-        virtual void removePlayer(Player *p) = 0;
-        virtual vector<Player*> getCurrentPlayer() = 0;
-        virtual void event(Player *p) = 0; // handles the response of the square(building when p lands on it).
+        public:
+        // Constructor
         Buildings(string &name, int pos);
-        virtual ~Buildings() = default; 
-};
+    
+        // Adds a player to the building
+        virtual void addPlayer(Player *p);
+    
+        // Removes a player from the building
+        virtual void removePlayer(Player *p);
+    
+        // Gets current players on the building
+        virtual vector<Player*> getCurrentPlayer();
+    
+        // Event triggered when a player lands on this building
+        virtual void event(Player *p) = 0;
+    
+        virtual ~Buildings() = default;
+};    
 
 #endif
