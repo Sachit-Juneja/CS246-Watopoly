@@ -6,4 +6,5 @@ GoTims::GoTims(): NonPropertyBuilding{"GoTims", 30} {
 
 GoTims::event(Player * p) {
     p->setPosition(10);
+    cout << p->getName() << " has been sent to DC Tims Line." << endl;
 }
