@@ -6,9 +6,9 @@
 #include <string>
 #include <algorithm>
 using namespace std;
-// #include "players.h" -> commented out for now, will be added once Austin is done with Players.
+#include "player.h" //-> commented out for now, will be added once Austin is done with Players.
 
-class Player; //forward declaration
+//class Player; //forward declaration
 
 class Buildings{
     protected:
@@ -18,7 +18,7 @@ class Buildings{
 
         public:
         // Constructor
-        Buildings(string &name, int pos);
+        Buildings(const string &name, int pos);
     
         // Adds a player to the building
         virtual void addPlayer(Player *p);
