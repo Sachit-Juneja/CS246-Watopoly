@@ -43,11 +43,11 @@ int Player::getPosition() {
     return currentPosition;
 }
 
-int getTimCups() {
+int Player::getTimCups() {
     return timCups;
 }
 
-void setTimCups(int cups) {
+void Player::setTimCups(int cups) {
     timCups = cups;
     return;
 }
