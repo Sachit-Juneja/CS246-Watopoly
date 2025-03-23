@@ -46,6 +46,7 @@ int Player::getPosition() {
 int getTimCups() {
     return timCups;
 }
+
 void setTimCups(int cups) {
     timCups = cups;
     return;
