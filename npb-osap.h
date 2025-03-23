@@ -6,11 +6,12 @@
 #include <string>
 #include <algorithm>
 #include "player.h"
+#include "nonpropertybuilding.h"
 
 class Osap {
-    void event(Player *p) override;
+    void event(Player *p);
 
     Osap(); // Constructor
-}
+};
 
 #endif
