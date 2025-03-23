@@ -1,8 +1,12 @@
 #include "npb-specials-needleshall.h"
 #include <iostream>
 
-NPBSpecialsNeedlesHall::NPBSpecialsNeedlesHall(std::string &name, int pos)
-    : NonPropertyBuilding(name, pos) {}
+NPBSpecialsNeedlesHall::NPBSpecialsNeedlesHall(int position)
+    : NonPropertyBuilding("Needles Hall", position) {}
+
+// NPBSpecialsNeedlesHall nh1(7);
+// NPBSpecialsNeedlesHall nh2(22);
+// NPBSpecialsNeedlesHall nh3(36);
 
 void NPBSpecialsNeedlesHall::event(Player *p) {
     if (specials.tryAwardCup(p)) {

@@ -5,12 +5,15 @@
 #include "npb-specials.h"
 #include "player.h"
 
+class Player;
+
 class NPBSpecialsNeedlesHall : public NonPropertyBuilding {
     NPBSpecials specials;
 
 public:
-    NPBSpecialsNeedlesHall(std::string &name, int pos);
-    void event(Player *p) override; // Handles money change or cup award
+    // Constructor: position is passed in, name is hardcoded
+    NPBSpecialsNeedlesHall(int position);
+    void event(Player *p) override;
 };
 
 #endif
