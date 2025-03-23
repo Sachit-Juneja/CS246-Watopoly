@@ -43,6 +43,14 @@ int Player::getPosition() {
     return currentPosition;
 }
 
+int Player::getTimCups() {
+    return timCups;
+}
+
+void Player::setTimCups(int cups) {
+    timCups = cups;
+    return;
+}
 
 int Player::move(int spaces) {
     currentPosition = (((currentPosition + spaces) % 40) + 40) % 40; 
@@ -61,4 +69,6 @@ int Player::addMoney(int amount) {
 int Player::getMoney() {
     return money;
 }
+
+
 

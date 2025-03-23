@@ -6,7 +6,7 @@
 // Abstract class for non-ownable buildings (e.g., OSAP, Goose Nesting)
 class NonPropertyBuilding : public Buildings {
 public:
-    NonPropertyBuilding(std::string &name, int pos);
+    NonPropertyBuilding(std::string name, int pos);
 
     // Only event is pure virtual now; others are inherited
     virtual void event(Player *p) override = 0;

@@ -3,13 +3,15 @@
 
 #include <string>
 #include <vector>
-class Board;
+class Board; // forward declaration
+
 class Player {
 
     std::string name;
     char icon;
     int currentPosition = 0;
     int money = 1500;
+    int timCups = 0; 
 
     friend class Board; 
     
@@ -19,6 +21,9 @@ class Player {
         Player(int character); // Constructor
         void setPosition(int building);
         int getPosition(); 
+
+        int getTimCups();
+        void setTimCups(int cups);
   
         // Calculates and moves player directly.
         // Modifies: currentPosition
