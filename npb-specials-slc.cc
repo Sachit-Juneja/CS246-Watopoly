@@ -19,6 +19,7 @@ void NPBSpecialsSLC::event(Player *p) {
 
     if (outcome == 1) {
         p->setPosition(10);
+        p->setTimsLine(1);
         std::cout << p->getName() << " is sent to DC Tims Line!" << std::endl;
     } else if (outcome == 2) {
         p->setPosition(0);
