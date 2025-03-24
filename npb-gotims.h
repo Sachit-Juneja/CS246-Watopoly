@@ -6,11 +6,11 @@
 #include <string>
 #include <algorithm>
 #include "player.h"
-
-class GoTims {
-    void event(Player *p) override;
+#include "nonpropertybuilding.h"
+class GoTims : public NonPropertyBuilding {
+    void event(Player *p);
 
     GoTims(); // Constructor
-}
+};
 
 #endif
