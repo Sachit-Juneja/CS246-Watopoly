@@ -1,14 +1,13 @@
 #ifndef PROPERTYBUILDINGS_H
 #define PROPERTYBUILDINGS_H
+#include "player.h"
+#include "buildings.h"
 #include <cstddef> 
 #include <iostream>
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "buildings.h"
 using namespace std;
-
-class Player;
 
 class Propertybuildings : public Buildings{
     protected:
