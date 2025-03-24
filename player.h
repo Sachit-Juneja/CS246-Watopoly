@@ -13,6 +13,12 @@ class Player {
     int money = 1500;
     int timCups = 0; 
 
+    // How many moves the player has been in the tims line.
+    // 0 = not in line
+    // This number should never exceed 3 if implemented correctly.
+    int inTimsLineMoves = 0; 
+
+
     friend class Board; 
     
     public:
@@ -35,8 +41,11 @@ class Player {
         // Adds or removes money from the player
         // Returns: New amount of money in player after calculations.
         int addMoney(int amount); 
-
         int getMoney();
+
+        void setTimsLine(int num);
+        int getTimsLine();
+
 };
 
 #endif

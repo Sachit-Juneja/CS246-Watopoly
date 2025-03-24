@@ -31,7 +31,7 @@ Player::Player(int character) {
         icon = 'T';
     } else {
         // Fallback if invalid input
-        cout << "INVALID CHARACTER SELECTED" << endl;
+        cout << "PLAYER CLASS CHARACTER ERROR (LINE SHOULD NOT BE REACHED)" << endl;
     }
 }
         
@@ -68,6 +68,14 @@ int Player::addMoney(int amount) {
 
 int Player::getMoney() {
     return money;
+}
+
+void Player::setTimsLine(int num) {
+    inTimsLineMoves = num;
+}
+
+int Player::getTimsLine() {
+    return inTimsLineMoves;
 }
 
 
