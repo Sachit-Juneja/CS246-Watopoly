@@ -1,21 +1,15 @@
 #ifndef PB_RESIDENCES_H
 #define PB_RESIDENCES_H
-#include "Propertybuildings.h"
-#include <cstddef> 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <algorithm>
-#include "player.h"
-using namespace std;
 
-class Player;
+#include "propertybuildings-new.h"
 
-class Residences : public Propertybuildings {
-    //static vector<Player *> currentPlayers;
-    static std::vector<Player*> currentPlayers;
-    public: 
-        Residences(vector<Player *> owners, int rent, Player* owner, string Faculty);
-        int numOwned();  
+class PBResidences : public PropertyBuildingsNew {
+public:
+    PBResidences(std::string name, int pos, int cost, std::string Faculty);
+
+    void event(Player *p) override;
+
+    ~PBResidences() override = default;
 };
+
 #endif
