@@ -27,3 +27,5 @@ class Propertybuildings : public Buildings{
         virtual string getFaculty();
 };
 #endif
+
+

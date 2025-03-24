@@ -6,7 +6,10 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include "player.h"
 using namespace std;
+
+class Player;
 
 class Residences : public Propertybuildings {
     //static vector<Player *> currentPlayers;
