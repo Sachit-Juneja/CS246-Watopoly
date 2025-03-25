@@ -2,7 +2,7 @@
 
 // Constructor: passes name and position to Buildings, sets cost
 PropertyBuildingsNew::PropertyBuildingsNew(std::string name, int pos, int cost, string Faculty)
-    : Buildings(name, pos), cost(cost) {}
+    : Buildings(name, pos), cost(cost), Faculty{Faculty} {}
 
 // Return current owner
 Player* PropertyBuildingsNew::getOwner() const {
