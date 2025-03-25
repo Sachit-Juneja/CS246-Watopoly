@@ -61,6 +61,14 @@ string Player::getName() {
     return name;
 }
 
+bool Player::getBankruptcy() {
+    return bankrupt;
+}
+
+void Player::setBankruptcy(bool b) {
+    b = true;
+}
+
 int Player::addMoney(int amount) {
     money += amount;
     return money; 
@@ -87,6 +95,10 @@ void Player::removeBuilding(Buildings *b){
     if(it != buildings_owned.end()){
         buildings_owned.erase(it);
     }
+}
+
+char Player::getIcon(){
+    return icon;
 }
 
 int Player::getNumResidencesOwned(){

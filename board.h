@@ -13,6 +13,9 @@
 #include "buildings.h"
 #include "propertybuildings-new.h"
 #include "nonpropertybuilding.h"
+#include "pb-gyms.h"
+#include "pb-residences.h"
+#include "pb-academicbuilding.h"   
 
 // Non-Property Buildings
 #include "npb-osap.h"
@@ -31,29 +34,30 @@
 #include "observer-observer.h"
 #include "observer-subject.h"
 
-class Controller; // Forward declaration
+class Controller;
 
-// Board Class Implementation:
+class Board {
+    Controller *gc;
+    Dice dice;
+    int currentPlayerIndex = 0;
+    int doublesRolled = 0;
 
-class Board : public Subject {
+public:
+    static std::vector<Buildings *> allBuildings;
+    static std::vector<Player *> allPlayers;
 
-    Controller *gc; // Pointer back to the game controller
+    Board(Controller *gc);
 
-    Dice dice = new Dice(); 
-    
-    public:
+    void notifyObservers();
 
-        static std::vector<Buildings *> allBuildings; // All buildings on Board
-        static std::vector<Player *> allPlayers; // All Players
+    void gameLoop();
+    void handleCommand(const std::string &input);
 
-        Board(Controller * gc); // Initializes a new game board;
-
-        void loadGame(fstream& loadFile); // Load a saved game
-        void newGame();
-        void startGame(); // Start the game
-        
-        void notifyObservers() override; // Update Display
-
+    Player* getCurrentPlayer();
+    Buildings* getBuildingByName(const std::string &name);
+    void advanceTurn();
+    void forceMoveToDC(Player *p);
 };
+
 
 #endif
