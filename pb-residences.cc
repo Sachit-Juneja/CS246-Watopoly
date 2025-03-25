@@ -55,3 +55,9 @@ void PBResidences::event(Player *p, std::vector<Player*> allPlayers) {
         std::cout << "You own this residence." << std::endl;
     }
 }
+
+void PBResidences::event(Player *p) {
+    return;
+}
+
+

@@ -9,8 +9,9 @@ public:
     PBResidences(std::string name, int pos, int cost, std::string Faculty);
 
     // Event when player lands on this residence
-    virtual void event(Player *p, std::vector<Player*> allPlayers);
-
+    void event(Player *p, std::vector<Player*> allPlayers);
+    void event(Player *p) override;
+    
     ~PBResidences() override = default;
 };
 

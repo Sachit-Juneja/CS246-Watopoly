@@ -16,7 +16,8 @@ public:
                        int improvementCost, std::array<int, 6> tuitionLevels);
 
     // Handles player landing on this property
-    virtual void event(Player *p, std::vector<Player*> allPlayers) = 0;
+    void event(Player *p, std::vector<Player*> allPlayers);
+    void event(Player *p) override;
 
     // Manage improvements
     void improve();

@@ -87,3 +87,7 @@ void PBAcademicBuilding::event(Player *p, std::vector<Player*> allPlayers) {
     }
 }
 
+
+void PBAcademicBuilding::event(Player *p) {
+    return;
+}
