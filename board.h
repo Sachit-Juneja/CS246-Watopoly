@@ -9,7 +9,7 @@
 // Local Header Files
 #include "player.h"
 #include "buildings.h"
-#include "propertybuilding.h"
+#include "propertybuildings-new.h"
 #include "nonpropertybuilding.h"
 
 // Non-Property Buildings
