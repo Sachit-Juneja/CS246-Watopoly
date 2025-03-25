@@ -33,7 +33,6 @@ void Auction::start(PropertyBuildingsNew *property, const std::vector<Player*> &
     if (highestBidder) {
         highestBidder->addMoney(-highestBid);
         property->setOwner(highestBidder);
-        highestBidder->addBuilding(property); // Fix later
         std::cout << highestBidder->getName() << " wins the auction for $" << highestBid << "!" << std::endl;
     } else {
         std::cout << "No valid bids. Property remains unowned." << std::endl;

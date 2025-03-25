@@ -45,7 +45,7 @@ void PBResidences::event(Player *p, std::vector<Player*> allPlayers) {
                 auction.start(this, allPlayers);
             }
         } else {
-            int owned = 1; // Replace with actual count later
+            int owned = p->getNumResidencesOwned(); // Replace with actual count later
             int rent = (owned == 1 ? 25 : (owned == 2 ? 50 : (owned == 3 ? 100 : 200)));
             p->addMoney(-rent);
             getOwner()->addMoney(rent);
