@@ -40,3 +40,8 @@ void PBGyms::event(Player *p, int rollTotal) {
         std::cout << "You own this Gym. No rent charged." << std::endl;
     }
 }
+
+void PBGyms::event(Player *p) {
+    // Does nothing
+    return;
+}

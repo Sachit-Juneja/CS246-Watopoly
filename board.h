@@ -15,6 +15,11 @@
 #include "propertybuildings-new.h"
 #include "nonpropertybuilding.h"
 
+// Property Buildings
+#include "pb-academicbuilding.h"
+#include "pb-residences.h"
+#include "pb-gyms.h"
+
 // Non-Property Buildings
 #include "npb-osap.h"
 #include "npb-dctimsline.h"

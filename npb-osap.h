@@ -9,6 +9,8 @@
 #include "nonpropertybuilding.h"
 
 class Osap : public NonPropertyBuilding {
+    public:
+    
     void event(Player *p);
 
     Osap(); // Constructor

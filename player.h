@@ -9,6 +9,7 @@ class Player {
 
     std::string name;
     char icon;
+    int charNum; // 1-8
     int currentPosition = 0;
     int money = 1500;
     int timCups = 0; 
@@ -27,6 +28,9 @@ class Player {
         Player(int character); // Constructor
         void setPosition(int building);
         int getPosition(); 
+        std::string getName();
+        int getCharNum();
+        char getIcon();
 
         int getTimCups();
         void setTimCups(int cups);
@@ -36,7 +40,6 @@ class Player {
         // Returns: Index of the new position/building it is on. */
         int move(int numBuildings); 
 
-        std::string getName();
 
         // Adds or removes money from the player
         // Returns: New amount of money in player after calculations.
