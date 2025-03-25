@@ -4,20 +4,28 @@
 #include "propertybuildings-new.h"
 #include <array>
 
+// Academic building class handles rent based on improvement levels (0-5)
 class PBAcademicBuilding : public PropertyBuildingsNew {
-    int improvementLevel;                     // 0 to 5
-    int improvementCost;
+    int improvementLevel;                     // Current improvement level
+    int improvementCost;                      // Cost to add an improvement
     std::array<int, 6> tuitionLevels;         // Tuition for 0–5 improvements
 
 public:
-    PBAcademicBuilding(std::string name, int pos, int cost, std::string Faculty,
+    // Constructor
+    PBAcademicBuilding(std::string name, int pos, int cost, std::string faculty,
                        int improvementCost, std::array<int, 6> tuitionLevels);
 
-    void event(Player *p) override;
+    // Handles player landing on this property
+    virtual void event(Player *p, std::vector<Player*> allPlayers) = 0;
 
-    void improve();      // Add improvement
-    void unimprove();    // Remove improvement
+    // Manage improvements
+    void improve();
+    void unimprove();
     int getTuition() const;
+
+    // getters for improvementLevel and improvementCost
+    int getImprovementLevel();
+    int getImprovementCost();
 
     ~PBAcademicBuilding() override = default;
 };

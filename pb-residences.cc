@@ -1,50 +1,57 @@
 #include "pb-residences.h"
-#include "player.h"  // Ensure this is included for Player methods
+#include "auction.h"
+#include "player.h"
 #include <iostream>
 
-// Constructor: passes everything to base
 PBResidences::PBResidences(std::string name, int pos, int cost, std::string Faculty)
     : PropertyBuildingsNew(name, pos, cost, Faculty) {}
 
-// Event: handles rent or purchase logic
-void PBResidences::event(Player *p) {
-    std::cout << p->getName() << " landed on " << building_name << "." << std::endl;
+// Residence event logic
+void PBResidences::event(Player *p, std::vector<Player*> allPlayers) {
+    std::cout << p->getName() << " landed on " << getName() << "." << std::endl;
+    Auction auction;
 
     if (getOwner() == nullptr) {
-        std::cout << building_name << " is unowned. Would you like to buy it for $" << getCost() << "? (y/n): ";
-        char choice;
-        std::cin >> choice;
-        if (choice == 'y' || choice == 'Y') {
+        std::cout << "Would you like to buy it for $" << getCost() << "? (y/n): ";
+        char c;
+        std::cin >> c;
+        if (c == 'y' || c == 'Y') {
             if (p->getMoney() >= getCost()) {
                 p->addMoney(-getCost());
                 setOwner(p);
-                std::cout << p->getName() << " bought " << building_name << " for $" << getCost() << "." << std::endl;
             } else {
-                std::cout << "Insufficient funds to purchase " << building_name << "." << std::endl;
+                std::cout << "Insufficient funds. Auctioning..." << std::endl;
+                auction.start(this, allPlayers);
             }
         } else {
-            std::cout << "Property will go to auction (not implemented here)." << std::endl;
+            auction.start(this, allPlayers);
         }
     } else if (getOwner() != p) {
-        // Calculate rent based on number of residences owned
-        int numResidencesOwned = 0;
-        // TODO: This requires Board or Player to track owned properties.
-        // For now, we simulate with a placeholder value:
-        // Replace this logic with actual ownership tracking later.
-
-        // Example placeholder: simulate owner has 2 residences
-        numResidencesOwned = 2;  // This should be dynamically calculated
-
-        int rent = 0;
-        if (numResidencesOwned == 1) rent = 25;
-        else if (numResidencesOwned == 2) rent = 50;
-        else if (numResidencesOwned == 3) rent = 100;
-        else if (numResidencesOwned >= 4) rent = 200;
-
-        std::cout << p->getName() << " must pay $" << rent << " rent to " << getOwner()->getName() << "." << std::endl;
-        p->addMoney(-rent);
-        getOwner()->addMoney(rent);
+        if (isMortgaged()) {
+            int price = getCost() * 0.6;
+            std::cout << "Buy mortgaged property for $" << price << "? (y/n): ";
+            char c;
+            std::cin >> c;
+            if (c == 'y' || c == 'Y') {
+                if (p->getMoney() >= price) {
+                    p->addMoney(-price);
+                    setOwner(p);
+                    unmortgage();
+                } else {
+                    std::cout << "Insufficient funds. Auctioning..." << std::endl;
+                    auction.start(this, allPlayers);
+                }
+            } else {
+                auction.start(this, allPlayers);
+            }
+        } else {
+            int owned = p->getNumResidencesOwned(); // Replace with actual count later
+            int rent = (owned == 1 ? 25 : (owned == 2 ? 50 : (owned == 3 ? 100 : 200)));
+            p->addMoney(-rent);
+            getOwner()->addMoney(rent);
+            std::cout << p->getName() << " pays rent of $" << rent << "." << std::endl;
+        }
     } else {
-        std::cout << "You already own this residence." << std::endl;
+        std::cout << "You own this residence." << std::endl;
     }
 }

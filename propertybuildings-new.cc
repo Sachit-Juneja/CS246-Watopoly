@@ -33,3 +33,7 @@ void PropertyBuildingsNew::mortgage() {
 void PropertyBuildingsNew::unmortgage() {
     mortgaged = false;
 }
+
+string PropertyBuildingsNew::getFaculty(){
+    return Faculty;
+}
