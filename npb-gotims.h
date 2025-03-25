@@ -8,9 +8,11 @@
 #include "player.h"
 #include "nonpropertybuilding.h"
 class GoTims : public NonPropertyBuilding {
-    void event(Player *p);
 
-    GoTims(); // Constructor
+    public:
+        void event(Player *p);
+
+        GoTims(); // Constructor
 };
 
 #endif

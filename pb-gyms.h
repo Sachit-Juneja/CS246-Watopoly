@@ -8,6 +8,8 @@ class PBGyms : public PropertyBuildingsNew {
 public:
     // Constructor
     PBGyms(std::string name, int pos, int cost, std::string Faculty);
+    
+    void event(Player *p) override;
 
     // Handles event when a player lands on this gym
     void event(Player *p, std::vector<Player*> allPlayers, int rollTotal); // Now accepts dice total. Have to double check on how we can pass that through. somehting to do with board class

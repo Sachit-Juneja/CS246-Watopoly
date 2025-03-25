@@ -3,10 +3,8 @@
 #include "auction.h"
 #include <iostream>
 
-PBAcademicBuilding::PBAcademicBuilding(std::string name, int pos, int cost, std::string faculty,
-                                       int improvementCost, std::array<int, 6> tuitionLevels)
-    : PropertyBuildingsNew(name, pos, cost, faculty),
-      improvementLevel(0), improvementCost(improvementCost), tuitionLevels(tuitionLevels) {}
+PBAcademicBuilding::PBAcademicBuilding(std::string name, int pos, int cost, std::string Faculty, int improvementCost, std::array<int, 6> tuitionLevels)
+    : PropertyBuildingsNew(name, pos, cost, Faculty), improvementLevel(0), improvementCost(improvementCost), tuitionLevels(tuitionLevels) {}
 
 int PBAcademicBuilding::getTuition() const {
     return tuitionLevels[improvementLevel];

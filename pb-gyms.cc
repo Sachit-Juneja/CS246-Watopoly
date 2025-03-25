@@ -55,3 +55,9 @@ void PBGyms::event(Player *p, std::vector<Player*> allPlayers, int rollTotal) {
         std::cout << "You own this gym." << std::endl;
     }
 }
+
+void PBGyms::event(Player *p) {
+    // Does nothing
+    return;
+}
+

@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <array>
 
 // Local Header Files
 #include "player.h"
@@ -16,6 +17,11 @@
 #include "pb-gyms.h"
 #include "pb-residences.h"
 #include "pb-academicbuilding.h"   
+
+// Property Buildings
+#include "pb-academicbuilding.h"
+#include "pb-residences.h"
+#include "pb-gyms.h"
 
 // Non-Property Buildings
 #include "npb-osap.h"
@@ -50,6 +56,11 @@ public:
 
     void notifyObservers();
 
+
+    void loadGame(fstream& loadFile); // Load a saved game
+    void newGame(); // Initialize the basic board. 
+    void startGame(); // Start the game
+        
     void gameLoop();
     void handleCommand(const std::string &input);
 

@@ -5,7 +5,7 @@
 
 class NPBGooseNesting : public NonPropertyBuilding {
 public:
-    NPBGooseNesting(); // Hardcoded name + position = 1
+    NPBGooseNesting(); // Hardcoded name + position 
     void event(Player *p) override;
 };
 

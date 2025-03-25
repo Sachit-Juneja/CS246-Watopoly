@@ -33,6 +33,7 @@ Player::Player(int character) {
         // Fallback if invalid input
         cout << "PLAYER CLASS CHARACTER ERROR (LINE SHOULD NOT BE REACHED)" << endl;
     }
+    charNum = character;
 }
         
 void Player::setPosition(int building) { //0-39
@@ -41,6 +42,14 @@ void Player::setPosition(int building) { //0-39
 
 int Player::getPosition() {
     return currentPosition;
+}
+
+int Player::getCharNum() {
+    return charNum;
+}
+
+char Player::getIcon() {
+    return icon;
 }
 
 int Player::getTimCups() {
