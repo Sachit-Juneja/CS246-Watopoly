@@ -37,20 +37,22 @@ class Board : public Subject {
 
     Controller *gc; // Pointer back to the game controller
 
-    std::vector<Buildings *> buildings; // All buildings on Board
-    std::vector<Player *> players; // All Players
+
     Dice dice; 
     
     public:
-        Board(Controller * gc); // Initializes a new game board;
 
+        static std::vector<Buildings *> allBuildings; // All buildings on Board
+        static std::vector<Player *> allPlayers; // All Players
+
+
+        Board(Controller * gc); // Initializes a new game board;
+        
 
         void notifyObservers() override; // Update Display
 
-        std::vector<Buildings*> getBuidings();
-        std::vector<Player*> getPlayers();
-        
-};
 
+
+};
 
 #endif
