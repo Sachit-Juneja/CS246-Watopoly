@@ -21,3 +21,8 @@ void Buildings::removePlayer(Player *p) {
 vector<Player*> Buildings::getCurrentPlayer() {
     return currentPlayers;
 }
+
+std::string Buildings::getName() const {
+    return building_name;
+}
+
