@@ -65,3 +65,12 @@ void PBAcademicBuilding::unimprove() {
         std::cout << "No improvements to remove." << std::endl;
     }
 }
+
+int PBAcademicBuilding::getImprovementCost(){
+    return improvementCost;
+}
+
+int PBAcademicBuilding::getImprovementLevel(){
+    return improvementLevel;
+}
+
