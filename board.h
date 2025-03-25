@@ -2,6 +2,8 @@
 #define BOARD_H
 #include <cstddef> 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -37,21 +39,20 @@ class Board : public Subject {
 
     Controller *gc; // Pointer back to the game controller
 
-
-    Dice dice; 
+    Dice dice = new Dice(); 
     
     public:
 
         static std::vector<Buildings *> allBuildings; // All buildings on Board
         static std::vector<Player *> allPlayers; // All Players
 
-
         Board(Controller * gc); // Initializes a new game board;
+
+        void loadGame(fstream& loadFile); // Load a saved game
+        void newGame();
+        void startGame(); // Start the game
         
-
         void notifyObservers() override; // Update Display
-
-
 
 };
 
