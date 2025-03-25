@@ -29,6 +29,8 @@ class Buildings{
         virtual void event(Player *p) = 0;
     
         virtual ~Buildings() = default;
+
+        std::string getName() const;
 };    
 
 #endif
