@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <array>
 
 // Local Header Files
 #include "player.h"
@@ -49,7 +50,7 @@ class Board : public Subject {
         Board(Controller * gc); // Initializes a new game board;
 
         void loadGame(fstream& loadFile); // Load a saved game
-        void newGame();
+        void newGame(); // Initialize the basic board. 
         void startGame(); // Start the game
         
         void notifyObservers() override; // Update Display
