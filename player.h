@@ -20,6 +20,7 @@ class Player {
     int timCups = 0; 
     int ownedResidences;
     int ownedGyms;
+    bool bankrupt = false;
 
     // TO DO: need to add the fields for the tims logic also. 
 
@@ -78,7 +79,10 @@ class Player {
 
         // returning the "networth" of a player
         int getTotalAssets();
-        
+
+        //Bankruptcy
+        bool getBankruptcy();
+        void setBankruptcy(bool b);        
 };
 
 #endif

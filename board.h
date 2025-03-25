@@ -34,27 +34,30 @@
 #include "observer-observer.h"
 #include "observer-subject.h"
 
-class Controller; // Forward declaration
+class Controller;
 
 class Board {
-    Controller *gc;               // Game controller (external logic)
-    Dice dice;                    // Dice system
-    int currentPlayerIndex = 0;   // Current player's turn index
+    Controller *gc;
+    Dice dice;
+    int currentPlayerIndex = 0;
+    int doublesRolled = 0;
 
 public:
-    static std::vector<Buildings *> allBuildings; // All game buildings (ownable + special)
-    static std::vector<Player *> allPlayers;      // All game players
+    static std::vector<Buildings *> allBuildings;
+    static std::vector<Player *> allPlayers;
 
-    Board(Controller *gc);       // Initialize the board
+    Board(Controller *gc);
 
-    void notifyObservers();      // Display/observer pattern hook
-    void gameLoop();             // Main command loop
-    void handleCommand(const std::string &input); // Handle individual command
+    void notifyObservers();
 
-    Player* getCurrentPlayer();  // Current player pointer
-    Buildings* getBuildingByName(const std::string &name); // Look up building
+    void gameLoop();
+    void handleCommand(const std::string &input);
+
+    Player* getCurrentPlayer();
+    Buildings* getBuildingByName(const std::string &name);
+    void advanceTurn();
+    void forceMoveToDC(Player *p);
 };
 
 
 #endif
-

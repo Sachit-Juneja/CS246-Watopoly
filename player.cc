@@ -61,6 +61,14 @@ string Player::getName() {
     return name;
 }
 
+bool Player::getBankruptcy() {
+    return bankrupt;
+}
+
+void Player::setBankruptcy(bool b) {
+    b = true;
+}
+
 int Player::addMoney(int amount) {
     money += amount;
     return money; 
