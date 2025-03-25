@@ -23,6 +23,10 @@ public:
     void unimprove();
     int getTuition() const;
 
+    // getters for improvementLevel and improvementCost
+    int getImprovementLevel();
+    int getImprovementCost();
+
     ~PBAcademicBuilding() override = default;
 };
 

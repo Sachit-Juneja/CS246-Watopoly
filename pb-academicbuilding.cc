@@ -12,13 +12,34 @@ int PBAcademicBuilding::getTuition() const {
     return tuitionLevels[improvementLevel];
 }
 
+// Add improvement (up to 5)
 void PBAcademicBuilding::improve() {
-    if (improvementLevel < 5) ++improvementLevel;
+    if (improvementLevel < 5) {
+        ++improvementLevel;
+        std::cout << "Improvement added. Level: " << improvementLevel << std::endl;
+    } else {
+        std::cout << "Maximum improvements reached." << std::endl;
+    }
 }
 
+// Remove improvement (down to 0)
 void PBAcademicBuilding::unimprove() {
-    if (improvementLevel > 0) --improvementLevel;
+    if (improvementLevel > 0) {
+        --improvementLevel;
+        std::cout << "Improvement removed. Level: " << improvementLevel << std::endl;
+    } else {
+        std::cout << "No improvements to remove." << std::endl;
+    }
 }
+
+int PBAcademicBuilding::getImprovementCost(){
+    return improvementCost;
+}
+
+int PBAcademicBuilding::getImprovementLevel(){
+    return improvementLevel;
+}
+
 
 void PBAcademicBuilding::event(Player *p, std::vector<Player*> allPlayers) {
     std::cout << p->getName() << " landed on " << getName() << "." << std::endl;
@@ -67,3 +88,4 @@ void PBAcademicBuilding::event(Player *p, std::vector<Player*> allPlayers) {
         std::cout << "You own this building." << std::endl;
     }
 }
+

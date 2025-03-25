@@ -31,6 +31,9 @@ public:
 
     virtual void auction();
 
+    // new addition (Arav, Monday March 24 @ 9:23 pm): getter for faculty
+    string getFaculty();
+
     virtual ~PropertyBuildingsNew() = default;
 };
 
