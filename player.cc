@@ -97,6 +97,10 @@ void Player::removeBuilding(Buildings *b){
     }
 }
 
+char Player::getIcon(){
+    return icon;
+}
+
 int Player::getNumResidencesOwned(){
     /*
     1. loop (iterate using iterator) through the buildings_owned vector

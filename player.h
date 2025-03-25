@@ -83,6 +83,9 @@ class Player {
         //Bankruptcy
         bool getBankruptcy();
         void setBankruptcy(bool b);        
+
+        // Symbol
+        char getIcon();
 };
 
 #endif
