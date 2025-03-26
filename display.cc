@@ -1,38 +1,44 @@
 #include "display.h"
 using namespace std;
 
+Display::Display(Board *board, const vector<Buildings*>& buildings){
+    b = board;
+    grid.resize(11, vector<Square*>(11, nullptr));
+    for(int i = 0; i < 11; ++i){
+        for(int j = 0; j < 11; ++j){
+            grid[i][j] = new Square();
+        }
+    }
+    draw(buildings);
+}
+
 void Display::draw(vector<Buildings*> buildings){
-    for(auto b: buildings){
-        int building_counter = 0;
-        // Collect OSAP -> DC Tims Line
-        for(int x = 10; x >= 1; --x){
-            grid[x][10]->assignBuilding(buildings[building_counter]);
-            ++building_counter;
-        }
-        building_counter = 11;
-        // RCH -> Goose Nesting
-        for(int y = 9; y >= 0; --y){
-            grid[0][y]->assignBuilding(buildings[building_counter]);
-            building_counter++;
-        }
-        // EV1 -> Go to Tims
-        building_counter = 21; // wrong
-        for(int x = 1; x <= 10; ++x){
-            grid[x][0]->assignBuilding(buildings[building_counter]);
-            ++building_counter;// wrong
-        }
-        // EIT -> DC
-        building_counter = 31; // wrong
-        for(int y = 1; y <= 9; ++y){
-            grid[10][y]->assignBuilding(buildings[building_counter]);
-            ++building_counter;
-        }
-        //building_counter should be 39 now. 
-        // non empty squares (1,1) to (9,9)
-        for(int i = 1; i <= 9; ++i){
-            for(int j = 1; j <= 9; ++j){
-                grid[i][j]->assignBuilding(nullptr);
-            }
+    int building_counter = 0;
+    // Collect OSAP -> DC Tims Line
+    for(int x = 10; x >= 1; --x){
+        grid[x][10]->assignBuilding(buildings[building_counter]);
+        ++building_counter;
+    }
+    // RCH -> Goose Nesting
+    for(int y = 9; y >= 0; --y){
+        grid[0][y]->assignBuilding(buildings[building_counter]);
+        building_counter++;
+    }
+    // EV1 -> Go to Tims
+    for(int x = 1; x <= 10; ++x){
+        grid[x][0]->assignBuilding(buildings[building_counter]);
+        ++building_counter;
+    }
+    // EIT -> DC
+    for(int y = 1; y <= 9; ++y){
+        grid[10][y]->assignBuilding(buildings[building_counter]);
+        ++building_counter;
+    }
+    //building_counter should be 39 now. 
+    // non empty squares (1,1) to (9,9)
+    for(int i = 1; i <= 9; ++i){
+        for(int j = 1; j <= 9; ++j){
+            grid[i][j]->assignBuilding(nullptr);
         }
     }
 }
