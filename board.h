@@ -43,16 +43,15 @@
 class Controller;
 
 class Board : public Subject {
-    Controller *gc;
     Dice dice;
     int currentPlayerIndex = 0;
     int doublesRolled = 0;
-
+    
 public:
     static std::vector<Buildings *> allBuildings;
     static std::vector<Player *> allPlayers;
 
-    Board(Controller *gc);
+    Board();
 
     //void notifyObservers(); not needed here - should be in the Subject class. 
 

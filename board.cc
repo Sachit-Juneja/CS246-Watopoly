@@ -1,9 +1,6 @@
 #include "board.h"
 
-std::vector<Buildings *> Board::allBuildings;
-std::vector<Player *> Board::allPlayers;
-
-Board::Board(Controller * gc) : gc{gc} {
+Board::Board() {
     // 0: OSAP
     allBuildings.emplace_back(new Osap()); 
 
