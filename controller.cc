@@ -2,6 +2,7 @@
 #include <unistd.h> // getpid
 #include "PRNG.h"
 #include "board.h"
+#include "display.h"
 
 using namespace std;
 
@@ -13,6 +14,8 @@ int main() {
     prng1.seed( seed );
     std::string input;
     Board b = Board();
+    Display d = Display(&b, b.allBuildings);
+    b.attachObservers(&d);
 
     cout << "Welcome to Watopoly!" << endl; 
     cout << "Please select how you want to start the game! (Enter 1 - 2)\n";
