@@ -1,6 +1,6 @@
 #include "board.h"
 
-Board::Board(Controller * gc) : gc{gc} {
+Board::Board() {
     // 0: OSAP
     allBuildings.emplace_back(new Osap()); 
 
