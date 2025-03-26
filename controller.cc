@@ -31,6 +31,6 @@ int main() {
     }
 
     // Start Game
-    b.startGame();
+    b.gameLoop();
 }
 

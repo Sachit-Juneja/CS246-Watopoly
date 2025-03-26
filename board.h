@@ -46,7 +46,7 @@ class Board : public Subject {
     Dice dice;
     int currentPlayerIndex = 0;
     int doublesRolled = 0;
-
+    
 public:
     static std::vector<Buildings *> allBuildings;
     static std::vector<Player *> allPlayers;
