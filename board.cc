@@ -289,6 +289,7 @@ void Board::newGame() {
 
     cout << "All players have been selected. Starting game..." << endl;
     startGame();
+    notifyObservers(); // Addition: for updating display.
 
 }
 

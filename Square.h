@@ -1,5 +1,5 @@
-#ifndef BOARD_H
-#define BOARD_H
+#ifndef SQUARE_H
+#define SQUARE_H
 #include <cstddef> 
 #include <iostream>
 #include <fstream>
@@ -40,35 +40,17 @@
 #include "observer-observer.h"
 #include "observer-subject.h"
 
-class Controller;
+using namespace std;
 
-class Board : public Subject {
-    Controller *gc;
-    Dice dice;
-    int currentPlayerIndex = 0;
-    int doublesRolled = 0;
-
-public:
-    static std::vector<Buildings *> allBuildings;
-    static std::vector<Player *> allPlayers;
-
-    Board(Controller *gc);
-
-    //void notifyObservers(); not needed here - should be in the Subject class. 
-
-
-    void loadGame(fstream& loadFile); // Load a saved game
-    void newGame(); // Initialize the basic board. 
-    void startGame(); // Start the game
-        
-    void gameLoop();
-    void handleCommand(const std::string &input);
-
-    Player* getCurrentPlayer();
-    Buildings* getBuildingByName(const std::string &name);
-    void advanceTurn();
-    void forceMoveToDC(Player *p);
+class Square{
+    Buildings* building; // pointer to the building in that Square.
+    vector<Player*> PlayersList; // list of players in that Square.
+    // possible field for improvements
+    public: 
+        void assignBuilding(Buildings* b); // assigns b to building for the Square, ctor
+        void addPlayer(Player* p); // adds p to PlayersList
+        void removePlayer(Player *p); // removes p from PlayersList
+        string render(int line_number); // returns the line(s) to print for this square, since each square has 3 lines. 
+        void clearPlayers(); // clears all players from the square. 
 };
-
-
 #endif
