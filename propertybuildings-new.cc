@@ -34,6 +34,10 @@ void PropertyBuildingsNew::unmortgage() {
     mortgaged = false;
 }
 
+void PropertyBuildingsNew::auction() {
+    std::cout << "Auction logic not yet implemented.\n";
+}
+
 string PropertyBuildingsNew::getFaculty(){
     return Faculty;
 }

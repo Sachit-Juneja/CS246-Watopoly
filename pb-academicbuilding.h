@@ -3,6 +3,9 @@
 
 #include "propertybuildings-new.h"
 #include <array>
+#include <vector>
+
+class Player;
 
 // Academic building class handles rent based on improvement levels (0-5)
 class PBAcademicBuilding : public PropertyBuildingsNew {
@@ -17,7 +20,7 @@ public:
 
     // Handles player landing on this property
     void event(Player *p, std::vector<Player*> allPlayers);
-    void event(Player *p) override;
+    void event(Player *p);
 
     // Manage improvements
     void improve();
@@ -28,7 +31,7 @@ public:
     int getImprovementLevel();
     int getImprovementCost();
 
-    ~PBAcademicBuilding() override = default;
+    ~PBAcademicBuilding() = default;
 };
 
 #endif

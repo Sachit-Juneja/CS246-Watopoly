@@ -2,6 +2,9 @@
 #define PB_RESIDENCES_H
 
 #include "propertybuildings-new.h"
+#include <vector>
+
+class Player;
 
 // PBResidences handles residence-type buildings with rent tiers based on ownership count
 class PBResidences : public PropertyBuildingsNew {
@@ -10,9 +13,9 @@ public:
 
     // Event when player lands on this residence
     void event(Player *p, std::vector<Player*> allPlayers);
-    void event(Player *p) override;
+    void event(Player *p);
     
-    ~PBResidences() override = default;
+    ~PBResidences() = default;
 };
 
 #endif

@@ -1,4 +1,5 @@
 #include "npb-goosenesting.h"
+#include "player.h"
 #include <iostream>
 
 NPBGooseNesting::NPBGooseNesting()

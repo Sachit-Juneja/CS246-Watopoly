@@ -1,36 +1,34 @@
 #ifndef BUILDINGS_H
 #define BUILDINGS_H
-#include "player.h" 
-#include <cstddef> 
-#include <iostream>
-#include <vector>
+
 #include <string>
+#include <vector>
+#include <iostream>
 #include <algorithm>
-using namespace std;
 
-class Buildings{
-    protected:
-        const int POS; // to track current position in board. (number between 0 - 39)
-        string building_name;
-        vector<Player*> currentPlayers;//-> uncomment once Player class is done. in Public so that Board class can access it
-    public:
-        // Constructor
-        Buildings(string name, int pos);
-        // Adds a player to the building
-        virtual void addPlayer(Player *p);
-    
-        // Removes a player from the building
-        virtual void removePlayer(Player *p);
-    
-        // Gets current players on the building
-        virtual vector<Player*> getCurrentPlayer();
-    
-        // Event triggered when a player lands on this building
-        virtual void event(Player *p) = 0;
-    
-        virtual ~Buildings() = default;
+// Forward declare Player to break circular dependencies
+class Player;
 
-        std::string getName() const;
-};    
+class Buildings {
+protected:
+    const int POS;                        // Position on board (0-39)
+    std::string building_name;           // Name of the building
+    std::vector<Player*> currentPlayers; // Players currently on this building
+
+public:
+    Buildings(std::string name, int pos);
+
+    // Player interaction
+    virtual void addPlayer(Player *p);
+    virtual void removePlayer(Player *p);
+    virtual std::vector<Player*> getCurrentPlayer();
+
+    // Called when a player lands on this building
+    virtual void event(Player *p) = 0;
+
+    virtual ~Buildings() = default;
+
+    std::string getName() const;
+};
 
 #endif

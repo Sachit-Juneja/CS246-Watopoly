@@ -1,28 +1,31 @@
 #include "buildings.h"
+#include "player.h"
+#include <vector>
+#include <string>
 
-// Constructor: Initializes building name and position
+// Constructor implementation
+Buildings::Buildings(std::string name, int pos)
+    : POS{pos}, building_name{name} {}
 
-Buildings::Buildings(string name, int pos) : building_name{name}, POS{pos} {}
-
-// Adds a player to the currentPlayers vector
+// Add a player to the building
 void Buildings::addPlayer(Player *p) {
     currentPlayers.push_back(p);
 }
 
-// Removes a player from the currentPlayers vector
+// Remove a player from the building
 void Buildings::removePlayer(Player *p) {
-    auto it = find(currentPlayers.begin(), currentPlayers.end(), p);
+    auto it = std::find(currentPlayers.begin(), currentPlayers.end(), p);
     if (it != currentPlayers.end()) {
         currentPlayers.erase(it);
     }
 }
 
-// Returns the current list of players on the building
-vector<Player*> Buildings::getCurrentPlayer() {
+// Return current players
+std::vector<Player*> Buildings::getCurrentPlayer() {
     return currentPlayers;
 }
 
+// Return building name
 std::string Buildings::getName() const {
     return building_name;
 }
-

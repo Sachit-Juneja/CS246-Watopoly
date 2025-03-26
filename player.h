@@ -4,12 +4,11 @@
 #include <string>
 #include <vector>
 #include "buildings.h"
-#include "pb-residences.h"
-#include "pb-gyms.h"
-#include "pb-academicbuilding.h"
 #include <map> // need to verify if this is allowed for using map
+
 using namespace std;
 class Board; // forward declaration
+class Buildings; // forward declaration
 
 class Player {
 
@@ -86,9 +85,6 @@ class Player {
         //Bankruptcy
         bool getBankruptcy();
         void setBankruptcy(bool b);        
-
-        // Symbol
-        char getIcon();
 };
 
 #endif
