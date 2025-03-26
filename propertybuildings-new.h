@@ -2,17 +2,22 @@
 #define PROPERTYBUILDINGS_NEW_H
 
 #include "buildings.h"
+#include "player.h"
+#include <string>   
+#include <vector>
+
+class Player;
 
 class PropertyBuildingsNew : public Buildings {
 protected:
     Player *owner;
     int cost;
     bool mortgaged;
-    string Faculty;
+    std::string Faculty;
 
 public:
     // Constructor: initializes name, board position, and cost
-    PropertyBuildingsNew(std::string name, int pos, int cost, string Faculty);
+    PropertyBuildingsNew(std::string name, int pos, int cost, std::string Faculty);
 
     // Owner management
     Player* getOwner() const;
@@ -27,7 +32,7 @@ public:
     void unmortgage();
 
     // Event handling (pure virtual, subclass must define)
-    virtual void event(Player *p) override = 0;
+    virtual void event(Player *p)  = 0;
 
     virtual void auction();
 

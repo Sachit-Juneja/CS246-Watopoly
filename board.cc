@@ -1,5 +1,8 @@
 #include "board.h"
 
+std::vector<Buildings *> Board::allBuildings;
+std::vector<Player *> Board::allPlayers;
+
 Board::Board(Controller * gc) : gc{gc} {
     // 0: OSAP
     allBuildings.emplace_back(new Osap()); 
@@ -288,9 +291,7 @@ void Board::newGame() {
     }
 
     cout << "All players have been selected. Starting game..." << endl;
-    startGame();
     //notifyObservers(); // Addition: for updating display.
-
 }
 
 void Board::loadGame(fstream& loadFile) {
@@ -595,7 +596,7 @@ void Board::handleCommand(const std::string &input) {
 
     else if (cmd == "bankrupt") {
         // GG. work on it
-        std::cout << "You cannot declare bankruptcy manually. It occurs automatically when needed.\n";
+        std::cout << "You cannot declare bankruptcy manually. It occurs automatically when needed. LMAO SUCKER!\n";
     }
 
     else if (cmd == "save") {

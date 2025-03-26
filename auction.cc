@@ -2,6 +2,8 @@
 #include "player.h"
 #include <iostream>
 #include <limits>
+#include "propertybuildings-new.h"
+
 
 void Auction::start(PropertyBuildingsNew *property, const std::vector<Player*> &players) {
     std::cout << "Auction started for " << property->getName() << "." << std::endl;
