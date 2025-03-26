@@ -48,8 +48,8 @@ class Board : public Subject {
     int doublesRolled = 0;
     
 public:
-    static std::vector<Buildings *> allBuildings;
-    static std::vector<Player *> allPlayers;
+    inline static std::vector<Buildings *> allBuildings;
+    inline static std::vector<Player *> allPlayers;
 
     Board();
 
