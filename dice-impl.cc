@@ -1,7 +1,7 @@
 #include "dice.h"
 #include "PRNG.h"
 
-PRNG prng;  // Use global PRNG instance (defined elsewhere)
+extern PRNG prng;  // Use global PRNG instance (defined elsewhere)
 
 #include <unistd.h>  // getpid()
 

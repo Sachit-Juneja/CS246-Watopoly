@@ -1,11 +1,17 @@
 #include <iostream>
+#include <unistd.h> // getpid
+#include "PRNG.h"
 #include "board.h"
 
 using namespace std;
 
+PRNG prng1, prng2, prng3;
+extern PRNG prng1;
 
 int main() {
-    string input;
+    uint32_t seed = getpid(); // start with a pseudo random-number
+    prng1.seed( seed );
+    std::string input;
     Board b = Board();
 
     cout << "Welcome to Watopoly!" << endl; 
