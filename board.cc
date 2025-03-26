@@ -289,6 +289,7 @@ void Board::newGame() {
 
     cout << "All players have been selected. Starting game..." << endl;
     startGame();
+    //notifyObservers(); // Addition: for updating display.
 
 }
 
@@ -347,12 +348,14 @@ void Board::handleCommand(const std::string &input) {
             ++doublesRolled;
             if (doublesRolled == 3) {
                 forceMoveToDC(p);
+                notifyObservers();
                 advanceTurn();
                 return;
             }
             int newPos = p->move(total);
             std::cout << "Landed on " << allBuildings[newPos]->getName()
                       << " (double rolled, will roll again)\n";
+            notifyObservers();
             handleCommand("roll");
             return;
         }
@@ -361,7 +364,7 @@ void Board::handleCommand(const std::string &input) {
         int newPos = p->move(total);
         Buildings *b = allBuildings[newPos];
         std::cout << "You landed on: " << b->getName() << std::endl;
-
+        notifyObservers();
         if (auto *gym = dynamic_cast<PBGyms *>(b)) {
             gym->event(p, allPlayers, total);
         } else if (auto *res = dynamic_cast<PBResidences *>(b)) {
@@ -484,6 +487,7 @@ void Board::handleCommand(const std::string &input) {
                 b->improve();
                 p->addMoney(-cost);
                 std::cout << "Improved " << name << " for $" << cost << ".\n";
+                notifyObservers();
             } else {
                 std::cout << "Not enough money.\n";
             }
@@ -491,6 +495,7 @@ void Board::handleCommand(const std::string &input) {
             b->unimprove();
             p->addMoney(cost / 2);
             std::cout << "Sold improvement on " << name << ", refunded $" << cost / 2 << ".\n";
+            notifyObservers();
         } else {
             std::cout << "Invalid action. Use buy/sell.\n";
         }

@@ -1,16 +1,17 @@
 #ifndef SUBJECT_H
 #define SUBJECT_H
 #include <vector>
+#include <algorithm>
 #include "observer-observer.h"
-
+using namespace std;
 class Subject {
 
-    std::vector<Observer*> observers;
+    vector<Observer*> observers;
 
     public:
-        virtual void notifyObservers() = 0;
-        virtual void attachObservers() = 0;
-        virtual void detachOBservers() = 0;
+        void notifyObservers();
+        void attachObservers(Observer *o);
+        void detachOBservers(Observer *o);
 };
 
 #endif

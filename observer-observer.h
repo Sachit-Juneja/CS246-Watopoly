@@ -6,6 +6,4 @@ class Observer {
         virtual void notify() = 0;
 
 };
-
 #endif
-
