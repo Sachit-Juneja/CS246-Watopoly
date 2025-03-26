@@ -51,6 +51,6 @@ class Square{
         void addPlayer(Player* p); // adds p to PlayersList
         void removePlayer(Player *p); // removes p from PlayersList
         string render(int line_number); // returns the line(s) to print for this square, since each square has 3 lines. 
-        void clearPlayers(); // clears all players from the square. 
+        void clearPlayers(); // clears all players from the square. // need to implement this.
 };
 #endif
