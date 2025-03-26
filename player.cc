@@ -1,4 +1,7 @@
 #include "player.h"
+#include "pb-residences.h"     
+#include "pb-gyms.h"           
+#include "pb-academicbuilding.h"  
 #include <string>
 #include <iostream>
 
@@ -106,9 +109,6 @@ void Player::removeBuilding(Buildings *b){
     }
 }
 
-char Player::getIcon(){
-    return icon;
-}
 
 int Player::getNumResidencesOwned(){
     /*

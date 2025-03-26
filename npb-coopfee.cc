@@ -1,4 +1,5 @@
 #include "npb-coopfee.h"
+#include "player.h"
 #include <iostream>
 
 NPBCoopFee::NPBCoopFee()

@@ -2,9 +2,9 @@
 #define AUCTION_H
 
 #include "propertybuildings-new.h"
+#include "player.h"
 #include <vector>
 
-class Player; // Forward declaration
 
 class Auction {
 public:

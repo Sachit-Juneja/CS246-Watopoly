@@ -1,4 +1,5 @@
 #include "npb-tuition.h"
+#include "player.h"
 #include <iostream>
 
 NPBTuition::NPBTuition()

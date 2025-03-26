@@ -288,9 +288,7 @@ void Board::newGame() {
     }
 
     cout << "All players have been selected. Starting game..." << endl;
-    startGame();
     //notifyObservers(); // Addition: for updating display.
-
 }
 
 void Board::loadGame(fstream& loadFile) {
@@ -595,7 +593,7 @@ void Board::handleCommand(const std::string &input) {
 
     else if (cmd == "bankrupt") {
         // GG. work on it
-        std::cout << "You cannot declare bankruptcy manually. It occurs automatically when needed.\n";
+        std::cout << "You cannot declare bankruptcy manually. It occurs automatically when needed. LMAO SUCKER!\n";
     }
 
     else if (cmd == "save") {
