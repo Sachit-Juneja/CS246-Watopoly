@@ -88,3 +88,7 @@ string Square::render(int line_number){
 
     return out.str();
 }
+
+void Square::clearPlayers(){
+    PlayersList.clear();
+}
