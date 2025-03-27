@@ -251,8 +251,10 @@ void Board::newGame() {
                     cout << "Invalid Input. Please enter a valid name." << endl;
                     cin.clear();
                     cin.ignore(1000, '\n');
+                    continue;
                 }
             }
+            break;
         }
         
         // Character Selection
