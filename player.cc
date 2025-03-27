@@ -7,7 +7,7 @@
 
 using namespace std;
 
-Player::Player(int character) {
+Player::Player(int character, std::string actualName): actualName{actualName} {
     if (character == 1) {
         name = "Goose";
         icon = 'G';
@@ -71,6 +71,10 @@ int Player::move(int spaces) {
 
 string Player::getName() {
     return name;
+}
+
+string Player::getActualName() {
+    return actualName;
 }
 
 bool Player::getBankruptcy() {

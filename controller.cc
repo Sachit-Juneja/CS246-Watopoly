@@ -1,5 +1,7 @@
 #include <iostream>
 #include <unistd.h> // getpid
+#include <cstring>
+#include <string>
 #include "PRNG.h"
 #include "board.h"
 #include "display.h"
@@ -9,7 +11,7 @@ using namespace std;
 PRNG prng1, prng2, prng3;
 extern PRNG prng1;
 
-int main() {
+int main(int argc, char *argv[]) {
     uint32_t seed = getpid(); // start with a pseudo random-number
     prng1.seed( seed );
     std::string input;
@@ -30,7 +32,13 @@ int main() {
             b.newGame();
             break;
         } else if (input == "2") {
-            // b->loadGame(); 
+            if (argc == 2 && std::string(argv[1]) == "-load") {
+                fstream loadFile = fstream(argv[2]);
+                b.loadGame(loadFile);
+            } else {
+                cout << "No load file detected. Starting a new game..." << endl;
+                b.newGame();
+            }
             break;
         } else {
             cout << "Invalid input. Please enter '1' to start a new game or '2' to load a save file." << endl;
@@ -40,6 +48,7 @@ int main() {
     }
 
     // Start Game
+    b.notifyObservers();
     b.gameLoop();
 }
 

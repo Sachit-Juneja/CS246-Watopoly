@@ -209,7 +209,7 @@ Board::Board() {
 }
 
 void Board::newGame() {
-    cout << "Please select the number of players (2-8): " << endl;
+    cout << "Please select the number of players (2-6): " << endl;
     int numPlayers;
 
     while (true) {
@@ -228,8 +228,8 @@ void Board::newGame() {
             }
         }
 
-        if (numPlayers < 2 || numPlayers > 8) {
-            cout << "Invalid number of players. Please select a number between 2 and 8." << endl;
+        if (numPlayers < 2 || numPlayers > 6) {
+            cout << "Invalid number of players. Please select a number between 2 and 6." << endl;
         } else {
             break;
         }
@@ -239,7 +239,24 @@ void Board::newGame() {
 
     int i = 0;
     while (i < numPlayers) {
-        cout << "Player " << i + 1 << " , please select a character (Type 1-8): " << endl;
+        // Player Name Input
+        cout << "Player " << i + 1 << " , please enter your name: " << endl;
+        string realName;
+        while (true) {
+            cin >> realName;
+            if (!cin) {
+                if (cin.eof()) {
+                    cout << "EOF DETECTED IN NAME INPUT. EXITING GAME." << endl;
+                } else {
+                    cout << "Invalid Input. Please enter a valid name." << endl;
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                }
+            }
+        }
+        
+        // Character Selection
+        cout << "Hello " << realName << "! Please select a character (Type 1-8): " << endl;
         cout << "1. Goose" << endl;
         cout << "2. GRT Bus" << endl;
         cout << "3. Tim Hortons Doughnut" << endl;
@@ -248,7 +265,7 @@ void Board::newGame() {
         cout << "6. Money" << endl;
         cout << "7. Laptop" << endl;
         cout << "8. Pink tie" << endl;
-        
+
         int character;
         while (true) {
             cin >> character;
@@ -280,7 +297,7 @@ void Board::newGame() {
             } else if (alreadyChosen) {
                 cout << "Character already selected. Please select a different character." << endl;
             } else {
-                allPlayers.emplace_back(new Player(character));
+                allPlayers.emplace_back(new Player(character, realName));
                 break;
             }
         }
@@ -288,14 +305,119 @@ void Board::newGame() {
     }
 
     cout << "All players have been selected. Starting game..." << endl;
-    //notifyObservers(); // Addition: for updating display.
 }
 
 void Board::loadGame(fstream& loadFile) {
+    // Load the number of players
+    int numPlayers;
+    loadFile >> numPlayers;
 
+    // 1. Load basic player info
+    for (int i = 0; i < numPlayers; i++) {
+
+        string realName;
+        char icon;
+        int timCups;
+        int money;
+        int position;
+        int timsLineBool;
+        int timsLine;
+
+        loadFile >> realName >> icon >> timCups >> money >> position;
+
+        int charNum;
+        if (icon == 'G') {
+            charNum = 1;
+        } else if (icon == 'B') {
+            charNum = 2;
+        } else if (icon == 'D') {
+            charNum = 3;
+        } else if (icon == 'P') {
+            charNum = 4;
+        } else if (icon == 'S') {
+            charNum = 5;
+        } else if (icon == '$') {
+            charNum = 6;
+        } else if (icon == 'L') {
+            charNum = 7;
+        } else if (icon == 'T') {
+            charNum = 8;
+        } else {
+            cout << "LOAD ICON ERROR (LINE SHOULD NOT BE REACHED)" << endl;
+            continue;
+        }
+
+        allPlayers.emplace_back(new Player(charNum, realName));
+        Player* p = allPlayers.back();
+        
+        p->setTimCups(timCups);
+        p->addMoney(money);
+        p->setPosition(position);
+
+        // If in tims line
+        if (position == 10) {
+            loadFile >> timsLineBool;
+            if (timsLineBool == 1) {
+                loadFile >> timsLine;
+                p->setTimsLine(timsLine + 1);
+            } else {
+                p->setTimsLine(0);
+            }
+        }  
+        
+        allBuildings[position]->addPlayer(p);
+    }
+
+    // 2. Load building info
+    // loop through all property buildings using dynamic casting and then set building properties
+    for (int i = 0; i < 40; i++) {
+
+        auto *building = dynamic_cast<PropertyBuildingsNew *>(allBuildings[i]); // This is just to check type dynamically
+        PropertyBuildingsNew *pb = dynamic_cast<PropertyBuildingsNew *>(allBuildings[i]); // Current building
+
+        if (!building) {
+            continue; // skip non-ownable buildings
+        } else {
+            string buildingName;
+            string ownerName;
+            int improvements;
+            
+            loadFile >> buildingName >> ownerName >> improvements;
+            
+            if (buildingName != pb->getName()) {
+                cout << "LOAD BUILDING ERROR (LINE SHOULD NOT BE REACHED): " << buildingName <<  " DOES NOT MATCH WITH" << pb->getName() << endl;
+                continue;
+            }
+
+            // Set owner and add building to owner
+            if (ownerName == "BANK") {
+                pb->setOwner(nullptr);
+            } else {
+                for (Player* p : allPlayers) {
+                    if (p->getActualName() == ownerName) {
+                        pb->setOwner(p);
+                        p->addBuilding(pb);
+                        break;
+                    }
+                }
+            }
+
+            // Set improvements
+            if (improvements == -1) {
+                pb->mortgage();
+            } else if (improvements == 0) {
+                //do nothing
+            } else {
+                for (int i = 0; i < improvements; i++) {
+                    // Since gyms and residences will never have improvements > 0, we can safely cast. 
+                    dynamic_cast<PBAcademicBuilding *>(pb)->improve();
+                }
+            }
+        }
+    }
+
+    cout << "Game loaded successfully." << endl;
 }
-
-
 
 
 Player* Board::getCurrentPlayer() {
@@ -615,7 +737,7 @@ void Board::handleCommand(const std::string &input) {
         
         // 2. Player info
         for (auto *pl : allPlayers) {
-            out << pl->getName() << " "
+            out << pl->getActualName() << " "
                 << pl->getIcon() << " "
                 << pl->getTimCups() << " "
                 << pl->getMoney() << " "
@@ -624,7 +746,7 @@ void Board::handleCommand(const std::string &input) {
             if (pl->getPosition() == 10) {
                 int timsLine = pl->getTimsLine();  // Number of turns in DC Tims Line
                 if (timsLine > 0) {
-                    out << " 1 " << timsLine;  // In line
+                    out << " 1 " << (timsLine - 1);  // In line
                 } else {
                     out << " 0";  // On the square, not in line
                 }
