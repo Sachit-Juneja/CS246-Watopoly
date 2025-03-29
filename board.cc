@@ -351,7 +351,6 @@ void Board::loadGame(fstream& loadFile) {
 
         allPlayers.emplace_back(new Player(charNum, realName));
         Player* p = allPlayers.back();
-        p->setActualName(realName);
         p->setTimCups(timCups);
         p->addMoney(money - 1500); // subtract the starting amount
         p->setPosition(position);

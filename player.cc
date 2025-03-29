@@ -73,10 +73,6 @@ string Player::getName() {
     return name;
 }
 
-void Player::setActualName(string name) {
-    actualName = name;
-}
-
 string Player::getActualName() {
     return actualName;
 }

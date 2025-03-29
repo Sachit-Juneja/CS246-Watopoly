@@ -44,7 +44,7 @@ class Player {
         std::string getName();
         int getCharNum();
         char getIcon();
-        void setActualName(std::string name);
+        // We don't have a setter for actual name as it should only be required during the construction of Player
         std::string getActualName();
 
         int getTimCups();
