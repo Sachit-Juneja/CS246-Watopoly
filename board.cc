@@ -800,7 +800,7 @@ void Board::handleCommand(const std::string &input) {
         Player *creditor = nullptr;
         for (auto *b : allBuildings) {
             PropertyBuildingsNew *pb = dynamic_cast<PropertyBuildingsNew *>(b);
-            if (pb && pb->getOwner() && pb->getOwner() != p && p->getPosition() == dynamic_cast<Buildings *>(pb)->getPosition()) {
+            if (pb && pb->getOwner() != p && p->getPosition() == dynamic_cast<Buildings *>(pb)->getPosition()) {
                 creditor = pb->getOwner();
                 break;
             }

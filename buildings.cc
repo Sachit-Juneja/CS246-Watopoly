@@ -31,6 +31,6 @@ std::string Buildings::getName() const {
 }
 
 
-int Buildings::getPosition() const {
+int Buildings::getPosition(){
     return POS;  // Assuming `position` is a member variable
 }

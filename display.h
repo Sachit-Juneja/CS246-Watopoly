@@ -3,6 +3,8 @@
 #include "observer-observer.h"
 #include "board.h"
 #include "Square.h"
+
+
 using namespace std;
 class Display : public Observer{
     Board *b; // since a Disply object owns a 
