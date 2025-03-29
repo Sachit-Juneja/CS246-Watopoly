@@ -46,6 +46,7 @@ class Board : public Subject {
     Dice dice;
     int currentPlayerIndex = 0;
     int doublesRolled = 0;
+    bool hasRolled = false; 
     
 public:
     inline static std::vector<Buildings *> allBuildings;
@@ -67,6 +68,7 @@ public:
     Buildings* getBuildingByName(const std::string &name);
     void advanceTurn();
     void forceMoveToDC(Player *p);
+
 };
 
 

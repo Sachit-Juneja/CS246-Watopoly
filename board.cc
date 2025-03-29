@@ -312,7 +312,10 @@ Buildings* Board::getBuildingByName(const std::string &name) {
 void Board::advanceTurn() {
     doublesRolled = 0;
     currentPlayerIndex = (currentPlayerIndex + 1) % allPlayers.size();
+    hasRolled = false; // Reset the roll for the next player's turn
+    std::cout << "It's now " << getCurrentPlayer()->getName() << "'s turn.\n";
 }
+
 
 void Board::forceMoveToDC(Player *p) {
     std::cout << p->getName() << " rolled 3 doubles in a row! Sent to DC Tims Line." << std::endl;
@@ -337,11 +340,18 @@ void Board::handleCommand(const std::string &input) {
     Player *p = getCurrentPlayer();
 
     if (cmd == "roll") {
+        if (hasRolled) {
+            std::cout << "You have already rolled this turn. Use 'next' to end your turn.\n";
+            return;
+        }
+    
         int total = dice.roll();
         int die1 = dice.getDie1();
         int die2 = dice.getDie2();
         std::cout << "You rolled: " << die1 << " + " << die2 << " = " << total << std::endl;
-
+    
+        hasRolled = true; // Mark roll as done for this turn
+    
         if (dice.checkDouble()) {
             ++doublesRolled;
             if (doublesRolled == 3) {
@@ -354,15 +364,18 @@ void Board::handleCommand(const std::string &input) {
             std::cout << "Landed on " << allBuildings[newPos]->getName()
                       << " (double rolled, will roll again)\n";
             notifyObservers();
-            handleCommand("roll");
+            // Allow rolling again if doubles (still within turn)
+            hasRolled = false;
             return;
         }
-
+    
         doublesRolled = 0;
         int newPos = p->move(total);
         Buildings *b = allBuildings[newPos];
         std::cout << "You landed on: " << b->getName() << std::endl;
         notifyObservers();
+    
+        // Trigger building-specific effects
         if (auto *gym = dynamic_cast<PBGyms *>(b)) {
             gym->event(p, allPlayers, total);
         } else if (auto *res = dynamic_cast<PBResidences *>(b)) {
@@ -373,6 +386,7 @@ void Board::handleCommand(const std::string &input) {
             b->event(p);
         }
     }
+    
 
     else if (cmd == "next") {
         advanceTurn();
