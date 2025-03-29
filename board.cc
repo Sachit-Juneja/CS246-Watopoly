@@ -254,6 +254,7 @@ void Board::newGame() {
                     continue;
                 }
             }
+            cin.ignore(1000, '\n'); // Make sure that the player only entered a single word for their name, ignore rest of line. 
             break;
         }
         
