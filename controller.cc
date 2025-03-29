@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
             b.newGame();
             break;
         } else if (input == "2") {
-            if (argc == 2 && std::string(argv[1]) == "-load") {
+            if (argc == 3 && std::string(argv[1]) == "-load") {
                 fstream loadFile = fstream(argv[2]);
                 b.loadGame(loadFile);
             } else {

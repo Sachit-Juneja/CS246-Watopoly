@@ -44,6 +44,7 @@ class Player {
         std::string getName();
         int getCharNum();
         char getIcon();
+        void setActualName(std::string name);
         std::string getActualName();
 
         int getTimCups();

@@ -351,9 +351,9 @@ void Board::loadGame(fstream& loadFile) {
 
         allPlayers.emplace_back(new Player(charNum, realName));
         Player* p = allPlayers.back();
-        
+        p->setActualName(realName);
         p->setTimCups(timCups);
-        p->addMoney(money);
+        p->addMoney(money - 1500); // subtract the starting amount
         p->setPosition(position);
 
         // If in tims line
@@ -383,11 +383,28 @@ void Board::loadGame(fstream& loadFile) {
             string buildingName;
             string ownerName;
             int improvements;
+
+            loadFile >> buildingName;
             
-            loadFile >> buildingName >> ownerName >> improvements;
+            string tempOwnerName;
+            while (true) {
+                loadFile >> tempOwnerName;
+                istringstream iss(tempOwnerName);
+                
+                if (iss >> improvements) {
+                    break;
+                } else {
+                    if (ownerName.empty()) {
+                        ownerName += tempOwnerName;
+                    } else {
+                        ownerName += " " + tempOwnerName;
+                    }
+                }
+                
+            }
             
             if (buildingName != pb->getName()) {
-                cout << "LOAD BUILDING ERROR (LINE SHOULD NOT BE REACHED): " << buildingName <<  " DOES NOT MATCH WITH" << pb->getName() << endl;
+                cout << "LOAD BUILDING ERROR (LINE SHOULD NOT BE REACHED): " << buildingName <<  " DOES NOT MATCH WITH " << pb->getName() << endl;
                 continue;
             }
 
@@ -400,6 +417,8 @@ void Board::loadGame(fstream& loadFile) {
                         pb->setOwner(p);
                         p->addBuilding(pb);
                         break;
+                    } else {
+                        cout << ownerName << " OWNER MISMATCH DETECTED IN LOAD GAME WITH " << p->getActualName() << endl;
                     }
                 }
             }
@@ -418,7 +437,17 @@ void Board::loadGame(fstream& loadFile) {
         }
     }
 
-    cout << "Game loaded successfully." << endl;
+    // Print Out Load Success Function
+    for (int i = 0; i < 99; i++) {
+        cout << "-";
+    }
+
+    cout << "Game loaded successfully. Welcome back!" << endl;
+
+    for (int i = 0; i < 99; i++) {
+        cout << "-";
+    }
+    cout << endl << endl;
 }
 
 
