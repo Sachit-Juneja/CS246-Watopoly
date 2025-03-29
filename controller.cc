@@ -13,13 +13,23 @@ extern PRNG prng1;
 
 int main(int argc, char *argv[]) {
     uint32_t seed = getpid(); // start with a pseudo random-number
-    prng1.seed( seed );
+    prng1.seed(seed);
     std::string input;
-    Board b = Board();
+    
+    bool testingMode = false;  // Flag for testing mode
+    
+    // Check for testing mode flag
+    for (int i = 1; i < argc; ++i) {
+        if (std::string(argv[i]) == "-testing") {
+            testingMode = true;
+        }
+    }
+
+    Board b = Board(testingMode);  // Pass testingMode to the Board
     Display d(&b, b.allBuildings);
     b.attachObservers(&d);
 
-    cout << "Welcome to Watopoly!" << endl; 
+    cout << "Welcome to Watopoly!" << endl;
     cout << "Please select how you want to start the game! (Enter 1 - 2)\n";
     cout << "1. New Game\n";
     cout << "2. Load Game" << endl;
@@ -32,9 +42,14 @@ int main(int argc, char *argv[]) {
             b.newGame();
             break;
         } else if (input == "2") {
-            if (argc == 3 && std::string(argv[1]) == "-load") {
+            if (argc >= 3 && std::string(argv[1]) == "-load") {
                 fstream loadFile = fstream(argv[2]);
-                b.loadGame(loadFile);
+                if (loadFile.is_open()) {
+                    b.loadGame(loadFile);
+                } else {
+                    cout << "Error: Unable to open file. Starting a new game..." << endl;
+                    b.newGame();
+                }
             } else {
                 cout << "No load file detected. Starting a new game..." << endl;
                 b.newGame();
@@ -51,4 +66,3 @@ int main(int argc, char *argv[]) {
     b.notifyObservers();
     b.gameLoop();
 }
-

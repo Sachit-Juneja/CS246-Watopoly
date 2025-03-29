@@ -48,12 +48,13 @@ class Board : public Subject {
     int currentPlayerIndex = 0;
     int doublesRolled = 0;
     bool hasRolled = false; 
+    bool testingMode; // Flag for testing mode
     
 public:
     inline static std::vector<Buildings *> allBuildings;
     inline static std::vector<Player *> allPlayers;
 
-    Board();
+    Board(bool testingMode=false);
 
     //void notifyObservers(); not needed here - should be in the Subject class. 
 

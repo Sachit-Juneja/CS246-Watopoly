@@ -18,12 +18,13 @@ void Dice::seed(unsigned int seedVal) {
     prng.seed(seedVal);
 }
 
+// Roll dice: Uses test values in testing mode, otherwise random values
 int Dice::roll() { 
     if (testingMode) {
-        die1 = testDie1;
+        die1 = testDie1;  // Use set test values
         die2 = testDie2;
     } else {
-        die1 = prng(1, 6);
+        die1 = prng(1, 6);  // Roll between 1 and 6 for regular mode
         die2 = prng(1, 6);
     }
     return die1 + die2;
@@ -37,8 +38,9 @@ int Dice::checkNumber() const {
     return die1 + die2;
 }
 
-void Dice::setTestRoll(int d1, int d2) { // purely for testing purposes and call this function to set fixed dice values
-    testingMode = true;
+// Set test values for testing mode
+void Dice::setTestRoll(int d1, int d2) {
+    testingMode = true;  // Enable testing mode
     testDie1 = d1;
     testDie2 = d2;
 }
