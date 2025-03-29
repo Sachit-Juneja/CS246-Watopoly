@@ -385,6 +385,7 @@ void Board::loadGame(fstream& loadFile) {
 
             loadFile >> buildingName;
             
+            // Since Player names can have spaces, we need to read until we find an integer (improvements)
             string tempOwnerName;
             while (true) {
                 loadFile >> tempOwnerName;
