@@ -26,6 +26,8 @@ public:
     // Called when a player lands on this building
     virtual void event(Player *p) = 0;
 
+    int getPosition();
+
     virtual ~Buildings() = default;
 
     std::string getName() const;

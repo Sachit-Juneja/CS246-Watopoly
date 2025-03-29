@@ -12,57 +12,41 @@ Display::Display(Board *board, const vector<Buildings*>& buildings){
     draw(buildings);
 }
 
+int* getCoordinates(int p, int arr[]) {
+    if (p >= 0 && p <= 10) {
+        // Bottom row: right to left
+        arr[0] = 10;
+        arr[1] = 10 - p;
+    } else if (p >= 11 && p <= 20) {
+        // Left column: bottom to top
+        arr[0] = 10 - (p - 10);
+        arr[1] = 0;
+    } else if (p >= 21 && p <= 30) {
+        // Top row: left to right
+        arr[0] = 0;
+        arr[1] = p - 20;
+    } else if (p >= 31 && p <= 39) {
+        // Right column: top to bottom
+        arr[0] = p - 30;
+        arr[1] = 10;
+    }
+    return arr;
+}
+
 void Display::draw(vector<Buildings*> buildings){
-    int building_counter = 0;
-    // Collect OSAP -> DC Tims Line
-    for(int x = 10; x >= 1; --x){
-        grid[x][10]->assignBuilding(buildings[building_counter]);
-        ++building_counter;
+    for(Buildings *b: buildings){
+        int position = b->getPosition();
+        int coords[2] = {0,0};
+        getCoordinates(position, coords);
+        grid[coords[0]][coords[1]]->assignBuilding(b);
     }
-    // RCH -> Goose Nesting
-    for(int y = 9; y >= 0; --y){
-        grid[0][y]->assignBuilding(buildings[building_counter]);
-        building_counter++;
-    }
-    // EV1 -> Go to Tims
-    for(int x = 1; x <= 10; ++x){
-        grid[x][0]->assignBuilding(buildings[building_counter]);
-        ++building_counter;
-    }
-    // EIT -> DC
-    for(int y = 1; y <= 9; ++y){
-        grid[10][y]->assignBuilding(buildings[building_counter]);
-        ++building_counter;
-    }
-    //building_counter should be 39 now. 
-    // non empty squares (1,1) to (9,9)
-    for(int i = 1; i <= 9; ++i){
-        for(int j = 1; j <= 9; ++j){
-            grid[i][j]->assignBuilding(nullptr);
+    for (int r = 1; r <= 9; ++r) {
+        for (int c = 1; c <= 9; ++c) {
+            grid[r][c]->assignBuilding(nullptr);
         }
     }
 }
 
-// getCoordinates: converts a player's position, p, into a 2-element array representing 
-// their coordinates on the grid through the arr[] array.
-int* getCoordinates(int p, int arr[]){
-    // Case 1: 
-    if((p >= 0) && (p <= 10)){
-        arr[1] = 10;
-        int x = 10 - p;
-        arr[0] = x;
-    }else if((p >= 11) && (p <= 20)){
-        arr[0] = 0;
-        arr[1] = 10 - (p - 10);
-    }else if((p >= 21) && (p <= 30)){
-        arr[0] = p - 20;
-        arr[1] = 0;
-    }else if((p >= 31) && (p <= 39)){
-        arr[0] = 10;
-        arr[1] = p - 30;
-    }
-    return arr;
-}
 
 void Display::notify(){
     // Step 1: reset the set. 
@@ -81,13 +65,12 @@ void Display::notify(){
         grid[Coordinates[0]][Coordinates[1]]->addPlayer(p); 
     }
     // Step 3: print the grid out now.
-    for(int square_line_number = 0; square_line_number < 5; ++square_line_number){
-        for(int row = 0; row < 11; ++row){
-            for(int col = 0; col < 11; ++col){
-                cout << grid[row][col]->render(square_line_number);
+    for (int r = 0; r < 11; ++r) {           // For each row
+        for (int line = 0; line < 8; ++line) {  // For each line in a square
+            for (int c = 0; c < 11; ++c) {   // For each column
+                cout << grid[r][c]->render(line);
             }
             cout << endl;
         }
-    } 
+    }
 }
-
