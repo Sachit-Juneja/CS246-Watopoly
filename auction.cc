@@ -4,34 +4,61 @@
 #include <limits>
 #include "propertybuildings-new.h"
 
-
-void Auction::start(PropertyBuildingsNew *property, const std::vector<Player*> &players) {
+void Auction::start(PropertyBuildingsNew *property, const std::vector<Player *> &players) {
     std::cout << "Auction started for " << property->getName() << "." << std::endl;
 
     int highestBid = 0;
     Player *highestBidder = nullptr;
 
-    for (Player *p : players) {
-        std::cout << p->getName() << ", enter your bid (or 0 to skip): $";
-        int bid;
-        std::cin >> bid;
+    // Track players still in the auction
+    std::vector<Player *> activePlayers(players);
 
-        // Input validation
-        while (std::cin.fail() || bid < 0) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Invalid bid. Enter a valid amount: $";
+    // Run auction until only one player remains
+    while (activePlayers.size() > 1) {
+        for (auto it = activePlayers.begin(); it != activePlayers.end(); ) {
+            Player *p = *it;
+
+            std::cout << p->getName() << ", enter your bid (or 0 to skip): $";
+            int bid;
             std::cin >> bid;
+
+            // Input validation
+            while (std::cin.fail() || bid < 0) {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Invalid bid. Enter a valid amount: $";
+                std::cin >> bid;
+            }
+
+            if (bid == 0) {
+                std::cout << p->getName() << " has skipped the auction." << std::endl;
+                it = activePlayers.erase(it); // Remove player if they skip
+                continue;
+            }
+
+            if (bid > p->getMoney()) {
+                std::cout << "Insufficient funds. Bid ignored." << std::endl;
+                continue;
+            }
+
+            if (bid > highestBid) {
+                highestBid = bid;
+                highestBidder = p;
+                std::cout << p->getName() << " is now the highest bidder with $" << highestBid << "." << std::endl;
+            } else {
+                std::cout << "Bid is too low. Current highest bid is $" << highestBid << "." << std::endl;
+            }
+
+            ++it;
         }
 
-        if (bid > highestBid && bid <= p->getMoney()) {
-            highestBid = bid;
-            highestBidder = p;
-        } else if (bid > p->getMoney()) {
-            std::cout << "Insufficient funds. Bid ignored." << std::endl;
+        // Check if only one player remains after a round
+        if (activePlayers.size() == 1) {
+            break;
         }
     }
 
+    // Determine the winner
     if (highestBidder) {
         highestBidder->addMoney(-highestBid);
         property->setOwner(highestBidder);
