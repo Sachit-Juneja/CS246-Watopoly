@@ -1,6 +1,6 @@
 #include "board.h"
 
-Board::Board() {
+Board::Board(bool testingMode) : testingMode(testingMode) { 
     // 0: OSAP
     allBuildings.emplace_back(new Osap()); 
 
@@ -559,6 +559,57 @@ void Board::handleCommand(const std::string &input) {
     std::string cmd;
     iss >> cmd;
     Player *p = getCurrentPlayer();
+
+    if (testingMode && cmd == "roll") {
+        int die1, die2;
+        if (iss >> die1 >> die2) {
+            // Set dice values for testing
+            dice.setTestRoll(die1, die2);
+            int total = dice.roll();
+            die1 = dice.getDie1();
+            die2 = dice.getDie2();
+
+            std::cout << "You rolled: " << die1 << " + " << die2 << " = " << total << std::endl;
+            
+            hasRolled = true;  // Mark roll as done for this turn
+
+            // Check for doubles and DC Tims Line logic
+            if (dice.checkDouble()) {
+                ++doublesRolled;
+                if (doublesRolled == 3) {
+                    forceMoveToDC(p);
+                    notifyObservers();
+                    advanceTurn();
+                    return;
+                }
+                int newPos = p->move(total);
+                std::cout << "Landed on " << allBuildings[newPos]->getName()
+                          << " (double rolled, will roll again)\n";
+                notifyObservers();
+                hasRolled = false;  // Allow reroll after double
+                return;
+            }
+
+            doublesRolled = 0;  // Reset doubles count if not double
+            int newPos = p->move(total);
+            Buildings *b = allBuildings[newPos];
+            std::cout << "You landed on: " << b->getName() << std::endl;
+            notifyObservers();
+
+            // Trigger building-specific effects
+            if (auto *gym = dynamic_cast<PBGyms *>(b)) {
+                gym->event(p, allPlayers, total);
+            } else if (auto *res = dynamic_cast<PBResidences *>(b)) {
+                res->event(p, allPlayers);
+            } else if (auto *aca = dynamic_cast<PBAcademicBuilding *>(b)) {
+                aca->event(p, allPlayers);
+            } else {
+                b->event(p);
+            }
+            return;
+        }
+    }
+
 
     if (cmd == "roll") {
         if (hasRolled) {
