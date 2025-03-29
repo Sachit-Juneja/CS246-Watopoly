@@ -84,7 +84,12 @@ class Player {
 
         //Bankruptcy
         bool getBankruptcy();
-        void setBankruptcy(bool b);        
+        void setBankruptcy(bool b);
+        void declareBankruptcy(Player *creditor = nullptr);
+        void clearProperties();
+        std::vector<Buildings *> getBuildingsOwned() const;
+
+        
 };
 
 #endif
