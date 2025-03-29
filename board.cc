@@ -453,6 +453,34 @@ void Board::loadGame(fstream& loadFile) {
     cout << endl << endl;
 }
 
+void Board::transferAssets(Player *from, Player *to) {
+    for (auto *b : from->getBuildingsOwned()) {
+        b->addPlayer(to);
+        to->addBuilding(b);
+        std::cout << b->getName() << " transferred to " << to->getName() << "." << std::endl;
+    }
+    to->addMoney(from->getMoney());
+    from->addMoney(-from->getMoney());
+    from->clearProperties();
+}
+
+void Board::returnAssetsToBank(Player *p) {
+    for (auto *b : p->getBuildingsOwned()) {
+        b->addPlayer(nullptr);
+        std::cout << b->getName() << " is now available for auction." << std::endl;
+    }
+    p->addMoney(-p->getMoney()); // Set money to zero
+    p->clearProperties();
+}
+
+void Board::removePlayer(Player *p) {
+    auto it = std::find(allPlayers.begin(), allPlayers.end(), p);
+    if (it != allPlayers.end()) {
+        std::cout << p->getName() << " has been removed from the game." << std::endl;
+        allPlayers.erase(it);
+        delete p;
+    }
+}
 
 Player* Board::getCurrentPlayer() {
     return allPlayers[currentPlayerIndex];
@@ -468,7 +496,10 @@ Buildings* Board::getBuildingByName(const std::string &name) {
 void Board::advanceTurn() {
     doublesRolled = 0;
     currentPlayerIndex = (currentPlayerIndex + 1) % allPlayers.size();
+    hasRolled = false; // Reset the roll for the next player's turn
+    std::cout << "It's now " << getCurrentPlayer()->getName() << "'s turn.\n";
 }
+
 
 void Board::forceMoveToDC(Player *p) {
     std::cout << p->getName() << " rolled 3 doubles in a row! Sent to DC Tims Line." << std::endl;
@@ -493,11 +524,18 @@ void Board::handleCommand(const std::string &input) {
     Player *p = getCurrentPlayer();
 
     if (cmd == "roll") {
+        if (hasRolled) {
+            std::cout << "You have already rolled this turn. Use 'next' to end your turn.\n";
+            return;
+        }
+    
         int total = dice.roll();
         int die1 = dice.getDie1();
         int die2 = dice.getDie2();
         std::cout << "You rolled: " << die1 << " + " << die2 << " = " << total << std::endl;
-
+    
+        hasRolled = true; // Mark roll as done for this turn
+    
         if (dice.checkDouble()) {
             ++doublesRolled;
             if (doublesRolled == 3) {
@@ -510,15 +548,18 @@ void Board::handleCommand(const std::string &input) {
             std::cout << "Landed on " << allBuildings[newPos]->getName()
                       << " (double rolled, will roll again)\n";
             notifyObservers();
-            handleCommand("roll");
+            // Allow rolling again if doubles (still within turn)
+            hasRolled = false;
             return;
         }
-
+    
         doublesRolled = 0;
         int newPos = p->move(total);
         Buildings *b = allBuildings[newPos];
         std::cout << "You landed on: " << b->getName() << std::endl;
         notifyObservers();
+    
+        // Trigger building-specific effects
         if (auto *gym = dynamic_cast<PBGyms *>(b)) {
             gym->event(p, allPlayers, total);
         } else if (auto *res = dynamic_cast<PBResidences *>(b)) {
@@ -529,6 +570,7 @@ void Board::handleCommand(const std::string &input) {
             b->event(p);
         }
     }
+    
 
     else if (cmd == "next") {
         advanceTurn();
@@ -748,9 +790,37 @@ void Board::handleCommand(const std::string &input) {
     
 
     else if (cmd == "bankrupt") {
-        // GG. work on it
-        std::cout << "You cannot declare bankruptcy manually. It occurs automatically when needed. LMAO SUCKER!\n";
+        Player *p = getCurrentPlayer();
+        if (!p->getBankruptcy()) {
+            std::cout << "You cannot declare bankruptcy at this time. You must be unable to pay a debt." << std::endl;
+            return;
+        }
+    
+        // Determine creditor (if applicable)
+        Player *creditor = nullptr;
+        for (auto *b : allBuildings) {
+            PropertyBuildingsNew *pb = dynamic_cast<PropertyBuildingsNew *>(b);
+            if (pb && pb->getOwner() && pb->getOwner() != p && p->getPosition() == dynamic_cast<Buildings *>(pb)->getPosition()) {
+                creditor = pb->getOwner();
+                break;
+            }
+        }
+    
+        // Finalize bankruptcy
+        std::cout << p->getName() << " has declared bankruptcy!" << std::endl;
+        if (creditor) {
+            std::cout << "Assets will be transferred to " << creditor->getName() << "." << std::endl;
+            transferAssets(p, creditor);
+        } 
+        else {
+            std::cout << "All assets are returned to the bank." << std::endl;
+            returnAssetsToBank(p);
+        }
+    
+        removePlayer(p);
     }
+    
+    
 
     else if (cmd == "save") {
         std::string filename;
