@@ -308,7 +308,6 @@ void Board::newGame() {
     }
 
     cout << "All players have been selected. Starting game..." << endl;
-    displayCommands();
 }
 
 void Board::loadGame(fstream& loadFile) {
@@ -452,7 +451,6 @@ void Board::loadGame(fstream& loadFile) {
         cout << "-";
     }
     cout << endl << endl;
-    displayCommands();
 }
 
 void Board::transferAssets(Player *from, Player *to) {
