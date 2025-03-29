@@ -65,6 +65,10 @@ void Player::setTimCups(int cups) {
 }
 
 int Player::move(int spaces) {
+    if (currentPosition + spaces > 39) {
+        // If the player goes past the last building, they get $200
+        addMoney(200);
+    }
     currentPosition = (((currentPosition + spaces) % 40) + 40) % 40; 
     return currentPosition;
 }
