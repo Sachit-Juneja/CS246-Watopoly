@@ -68,7 +68,9 @@ public:
     Buildings* getBuildingByName(const std::string &name);
     void advanceTurn();
     void forceMoveToDC(Player *p);
-
+    void removePlayer(Player *p);
+    void transferAssets(Player *from, Player *to);
+    void returnAssetsToBank(Player *p);
 };
 
 

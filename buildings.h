@@ -29,6 +29,8 @@ public:
     virtual ~Buildings() = default;
 
     std::string getName() const;
+
+    virtual int getPosition() const;  // Ensure this method exists
 };
 
 #endif

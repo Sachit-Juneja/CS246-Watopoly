@@ -296,6 +296,35 @@ void Board::loadGame(fstream& loadFile) {
 }
 
 
+void Board::transferAssets(Player *from, Player *to) {
+    for (auto *b : from->getBuildingsOwned()) {
+        b->addPlayer(to);
+        to->addBuilding(b);
+        std::cout << b->getName() << " transferred to " << to->getName() << "." << std::endl;
+    }
+    to->addMoney(from->getMoney());
+    from->addMoney(-from->getMoney());
+    from->clearProperties();
+}
+
+void Board::returnAssetsToBank(Player *p) {
+    for (auto *b : p->getBuildingsOwned()) {
+        b->addPlayer(nullptr);
+        std::cout << b->getName() << " is now available for auction." << std::endl;
+    }
+    p->addMoney(-p->getMoney()); // Set money to zero
+    p->clearProperties();
+}
+
+void Board::removePlayer(Player *p) {
+    auto it = std::find(allPlayers.begin(), allPlayers.end(), p);
+    if (it != allPlayers.end()) {
+        std::cout << p->getName() << " has been removed from the game." << std::endl;
+        allPlayers.erase(it);
+        delete p;
+    }
+}
+
 
 
 Player* Board::getCurrentPlayer() {
@@ -606,9 +635,37 @@ void Board::handleCommand(const std::string &input) {
     
 
     else if (cmd == "bankrupt") {
-        // GG. work on it
-        std::cout << "You cannot declare bankruptcy manually. It occurs automatically when needed. LMAO SUCKER!\n";
+        Player *p = getCurrentPlayer();
+        if (!p->getBankruptcy()) {
+            std::cout << "You cannot declare bankruptcy at this time. You must be unable to pay a debt." << std::endl;
+            return;
+        }
+    
+        // Determine creditor (if applicable)
+        Player *creditor = nullptr;
+        for (auto *b : allBuildings) {
+            PropertyBuildingsNew *pb = dynamic_cast<PropertyBuildingsNew *>(b);
+            if (pb && pb->getOwner() && pb->getOwner() != p && p->getPosition() == dynamic_cast<Buildings *>(pb)->getPosition()) {
+                creditor = pb->getOwner();
+                break;
+            }
+        }
+    
+        // Finalize bankruptcy
+        std::cout << p->getName() << " has declared bankruptcy!" << std::endl;
+        if (creditor) {
+            std::cout << "Assets will be transferred to " << creditor->getName() << "." << std::endl;
+            transferAssets(p, creditor);
+        } 
+        else {
+            std::cout << "All assets are returned to the bank." << std::endl;
+            returnAssetsToBank(p);
+        }
+    
+        removePlayer(p);
     }
+    
+    
 
     else if (cmd == "save") {
         std::string filename;

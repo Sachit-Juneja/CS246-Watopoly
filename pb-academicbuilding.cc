@@ -30,16 +30,15 @@ void PBAcademicBuilding::unimprove() {
     }
 }
 
-int PBAcademicBuilding::getImprovementCost(){
+int PBAcademicBuilding::getImprovementCost() {
     return improvementCost;
 }
 
-int PBAcademicBuilding::getImprovementLevel(){
+int PBAcademicBuilding::getImprovementLevel() {
     return improvementLevel;
 }
 
-
-void PBAcademicBuilding::event(Player *p, std::vector<Player*> allPlayers) {
+void PBAcademicBuilding::event(Player *p, std::vector<Player *> allPlayers) {
     std::cout << p->getName() << " landed on " << getName() << "." << std::endl;
     Auction auction;
 
@@ -51,6 +50,7 @@ void PBAcademicBuilding::event(Player *p, std::vector<Player*> allPlayers) {
             if (p->getMoney() >= getCost()) {
                 p->addMoney(-getCost());
                 setOwner(p);
+                std::cout << p->getName() << " bought " << getName() << " for $" << getCost() << "." << std::endl;
             } else {
                 std::cout << "Not enough money. Auction begins!" << std::endl;
                 auction.start(this, allPlayers);
@@ -58,7 +58,8 @@ void PBAcademicBuilding::event(Player *p, std::vector<Player*> allPlayers) {
         } else {
             auction.start(this, allPlayers);
         }
-    } else if (getOwner() != p) {
+    } 
+    else if (getOwner() != p) {
         if (isMortgaged()) {
             int discount = getCost() * 0.6;
             std::cout << "This building is mortgaged. Would you like to buy it for $" << discount << "? (y/n): ";
@@ -69,6 +70,7 @@ void PBAcademicBuilding::event(Player *p, std::vector<Player*> allPlayers) {
                     p->addMoney(-discount);
                     setOwner(p);
                     unmortgage();
+                    std::cout << p->getName() << " bought the mortgaged property and unmortgaged it.\n";
                 } else {
                     std::cout << "Insufficient funds. Auction begins!" << std::endl;
                     auction.start(this, allPlayers);
@@ -76,18 +78,31 @@ void PBAcademicBuilding::event(Player *p, std::vector<Player*> allPlayers) {
             } else {
                 auction.start(this, allPlayers);
             }
-        } else {
+        } 
+        else {
             int rent = getTuition();
-            std::cout << "Paying tuition of $" << rent << " to " << getOwner()->getName() << "." << std::endl;
-            p->addMoney(-rent);
-            getOwner()->addMoney(rent);
+
+            // Check if the player can afford the tuition
+            if (p->getMoney() < rent) {
+                std::cout << p->getName() << " does not have enough money to pay the tuition of $" << rent << "." << std::endl;
+                std::cout << p->getName() << " must mortgage properties, trade, or declare bankruptcy." << std::endl;
+                p->setBankruptcy(true);  // Set bankruptcy but wait for explicit command
+                return; // Let Board handle the situation
+            } 
+            else {
+                p->addMoney(-rent);
+                getOwner()->addMoney(rent);
+                std::cout << p->getName() << " pays tuition of $" << rent << " to " << getOwner()->getName() << "." << std::endl;
+            }
         }
-    } else {
+    } 
+    else {
         std::cout << "You own this building." << std::endl;
     }
 }
 
-
+// Unused event override
 void PBAcademicBuilding::event(Player *p) {
+    // Does nothing
     return;
 }
