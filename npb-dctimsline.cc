@@ -5,6 +5,11 @@ DCTimsLine::DCTimsLine(): NonPropertyBuilding{"DC Tims Line", 10} {
 }
 
 void DCTimsLine::event(Player * p) {
+    // If not in line
+    if (p->getTimsLine() == 0) {
+        return;
+    }
+
     cout << "You are in the DC Tims Line. Please pay $50 to exit or use a Roll Up the Rim cup\n";
     cout << "Enter 'pay' to exit\n";
     cout << "Enter 'cup' to exit\n";

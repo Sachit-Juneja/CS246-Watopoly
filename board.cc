@@ -512,6 +512,7 @@ void Board::gameLoop() {
     while (true) {
         std::cout << "\n[" << getCurrentPlayer()->getName() << "] > ";
         std::getline(std::cin, input);
+        
         if (input == "quit") break;
         handleCommand(input);
     }
@@ -538,6 +539,13 @@ void Board::handleCommand(const std::string &input) {
     
         if (dice.checkDouble()) {
             ++doublesRolled;
+
+            // If In DC Tims Line, we recent.
+            if (p->getPosition() == 10 && p->getTimsLine() >= 1 && p->getTimsLine() <= 2) {
+                p->setTimsLine(0);
+                std::cout << "You rolled doubles while in DC Tims Line. You can move again.\n";
+            }
+
             if (doublesRolled == 3) {
                 forceMoveToDC(p);
                 notifyObservers();
@@ -573,6 +581,10 @@ void Board::handleCommand(const std::string &input) {
     
 
     else if (cmd == "next") {
+        if (!hasRolled) {
+            std::cout << "You must roll before ending your turn. Use 'roll' to roll the dice.\n";
+            return;
+        }
         advanceTurn();
     }
 

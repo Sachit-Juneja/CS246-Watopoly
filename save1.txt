@@ -1,6 +1,6 @@
 2
-Austin G 0 1240 14
-Sachit B 0 1440 3
+Austin G 0 1240 1
+Sachit B 0 1440 2
 AL BANK 0
 ML Sachit 0
 MKV BANK 0
