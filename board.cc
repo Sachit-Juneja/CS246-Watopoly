@@ -418,7 +418,8 @@ void Board::loadGame(fstream& loadFile) {
                         p->addBuilding(pb);
                         break;
                     } else {
-                        cout << ownerName << " OWNER MISMATCH DETECTED IN LOAD GAME WITH " << p->getActualName() << endl;
+                        continue;
+                        // THIS IS FOR TESTING PURPOSES ONLY, IT WILL ALWAYS RETURN AN ERROR IGNORE ERRORS: cout << ownerName << " OWNER MISMATCH DETECTED IN LOAD GAME WITH " << p->getActualName() << endl; 
                     }
                 }
             }
@@ -441,6 +442,7 @@ void Board::loadGame(fstream& loadFile) {
     for (int i = 0; i < 99; i++) {
         cout << "-";
     }
+    cout << endl;
 
     cout << "Game loaded successfully. Welcome back!" << endl;
 
@@ -792,7 +794,7 @@ void Board::handleCommand(const std::string &input) {
             auto *pb = dynamic_cast<PropertyBuildingsNew *>(b);
             if (!pb) continue; // skip non-ownable buildings
     
-            std::string ownerName = pb->getOwner() ? pb->getOwner()->getName() : "BANK";
+            std::string ownerName = pb->getOwner() ? pb->getOwner()->getActualName() : "BANK";
             int improvements = 0;
     
             if (auto *aca = dynamic_cast<PBAcademicBuilding *>(pb)) {
