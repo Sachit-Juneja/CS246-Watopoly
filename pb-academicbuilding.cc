@@ -41,6 +41,7 @@ int PBAcademicBuilding::getImprovementLevel() {
 void PBAcademicBuilding::event(Player *p, std::vector<Player *> allPlayers) {
     std::cout << p->getName() << " landed on " << getName() << "." << std::endl;
     Auction auction;
+    int rent = 0;
 
     if (getOwner() == nullptr) {
         std::cout << "Would you like to buy " << getName() << " for $" << getCost() << "? (y/n): ";
@@ -82,7 +83,14 @@ void PBAcademicBuilding::event(Player *p, std::vector<Player *> allPlayers) {
             }
         } 
         else {
-            int rent = getTuition();
+            if (getOwner()->hasMonopoly(getFaculty()) && improvementLevel == 0) {
+                rent = 2 * getTuition();
+                std::cout << "There is a monopoly on " << getFaculty() << ". Rent is $" << rent << "." << std::endl;
+            } 
+            else {
+                rent = getTuition();
+                std::cout << "Rent is $" << getTuition() << "." << std::endl;
+            }
 
             // Check if the player can afford the tuition
             if (p->getMoney() < rent) {
