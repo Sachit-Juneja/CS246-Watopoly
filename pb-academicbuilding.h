@@ -4,6 +4,7 @@
 #include "propertybuildings-new.h"
 #include <array>
 #include <vector>
+#include <limits>
 
 class Player;
 

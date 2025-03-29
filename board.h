@@ -8,6 +8,7 @@
 #include <string>
 #include <algorithm>
 #include <array>
+#include <limits>  // <-- Add this line
 
 // Local Header Files
 #include "player.h"
