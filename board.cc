@@ -209,6 +209,9 @@ Board::Board() {
 }
 
 void Board::newGame() {
+    std::cout << "Welcome to Watopoly! Here are the available commands:\n";
+    displayCommands();
+
     cout << "Please select the number of players (2-6): " << endl;
     int numPlayers;
 
@@ -308,6 +311,11 @@ void Board::newGame() {
     }
 
     cout << "All players have been selected. Starting game..." << endl;
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    // Start the game loop
+    gameLoop();
 }
 
 void Board::loadGame(fstream& loadFile) {
@@ -450,6 +458,7 @@ void Board::loadGame(fstream& loadFile) {
     for (int i = 0; i < 99; i++) {
         cout << "-";
     }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     cout << endl << endl;
 }
 
