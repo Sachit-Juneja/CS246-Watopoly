@@ -541,7 +541,7 @@ void Board::handleCommand(const std::string &input) {
             ++doublesRolled;
 
             // If In DC Tims Line, we recent.
-            if (p->getPosition() == 10 && p->getTimsLine() >= 1 && p->getTimsLine() <= 2) {
+            if (p->getPosition() == 10 && p->getTimsLine() >= 1 && p->getTimsLine() <= 3) {
                 p->setTimsLine(0);
                 std::cout << "You rolled doubles while in DC Tims Line. You can move again.\n";
             }
