@@ -46,6 +46,7 @@ void PBAcademicBuilding::event(Player *p, std::vector<Player *> allPlayers) {
         std::cout << "Would you like to buy " << getName() << " for $" << getCost() << "? (y/n): ";
         char c;
         std::cin >> c;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Clear buffer
         if (c == 'y' || c == 'Y') {
             if (p->getMoney() >= getCost()) {
                 p->addMoney(-getCost());
@@ -65,6 +66,7 @@ void PBAcademicBuilding::event(Player *p, std::vector<Player *> allPlayers) {
             std::cout << "This building is mortgaged. Would you like to buy it for $" << discount << "? (y/n): ";
             char c;
             std::cin >> c;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Clear buffer
             if (c == 'y' || c == 'Y') {
                 if (p->getMoney() >= discount) {
                     p->addMoney(-discount);

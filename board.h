@@ -8,6 +8,7 @@
 #include <string>
 #include <algorithm>
 #include <array>
+#include <limits>  // <-- Add this line
 
 // Local Header Files
 #include "player.h"
@@ -71,6 +72,7 @@ public:
     void removePlayer(Player *p);
     void transferAssets(Player *from, Player *to);
     void returnAssetsToBank(Player *p);
+    void displayCommands();
 };
 
 

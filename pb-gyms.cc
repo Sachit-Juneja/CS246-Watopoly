@@ -15,10 +15,12 @@ void PBGyms::event(Player *p, std::vector<Player *> allPlayers, int rollTotal) {
         std::cout << "Buy for $" << getCost() << "? (y/n): ";
         char c;
         std::cin >> c;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Clear buffer
         if (c == 'y' || c == 'Y') {
             if (p->getMoney() >= getCost()) {
                 p->addMoney(-getCost());
                 setOwner(p);
+                p->addBuilding(this); // new addition
                 std::cout << p->getName() << " bought " << getName() << " for $" << getCost() << "." << std::endl;
             } else {
                 std::cout << "Insufficient funds. Auctioning..." << std::endl;
@@ -34,6 +36,7 @@ void PBGyms::event(Player *p, std::vector<Player *> allPlayers, int rollTotal) {
             std::cout << "Buy mortgaged gym for $" << price << "? (y/n): ";
             char c;
             std::cin >> c;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Clear buffer
             if (c == 'y' || c == 'Y') {
                 if (p->getMoney() >= price) {
                     p->addMoney(-price);

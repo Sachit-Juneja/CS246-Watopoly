@@ -3,6 +3,7 @@
 
 #include "propertybuildings-new.h"
 #include <vector>
+#include <limits>
 
 class Player;
 
