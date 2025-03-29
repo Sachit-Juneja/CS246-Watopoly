@@ -71,6 +71,7 @@ public:
     void removePlayer(Player *p);
     void transferAssets(Player *from, Player *to);
     void returnAssetsToBank(Player *p);
+    void displayCommands();
 };
 
 

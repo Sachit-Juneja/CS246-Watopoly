@@ -308,6 +308,7 @@ void Board::newGame() {
     }
 
     cout << "All players have been selected. Starting game..." << endl;
+    displayCommands();
 }
 
 void Board::loadGame(fstream& loadFile) {
@@ -451,6 +452,7 @@ void Board::loadGame(fstream& loadFile) {
         cout << "-";
     }
     cout << endl << endl;
+    displayCommands();
 }
 
 void Board::transferAssets(Player *from, Player *to) {
@@ -482,6 +484,29 @@ void Board::removePlayer(Player *p) {
     }
 }
 
+void Board::displayCommands() {
+    std::cout << "\nAvailable Commands:\n";
+    std::cout << "-------------------------------------------------\n";
+    std::cout << "roll                : Roll two dice and move your piece.\n";
+    std::cout << "next                : End your turn and give control to the next player.\n";
+    std::cout << "trade <name> <give> <receive> : Offer a trade to another player.\n";
+    std::cout << "    - name     : Name of the player to trade with.\n";
+    std::cout << "    - give     : Property name or money amount to give.\n";
+    std::cout << "    - receive  : Property name or money amount to receive.\n";
+    std::cout << "improve <property> buy/sell : Buy or sell an improvement on a property.\n";
+    std::cout << "    - property : Name of the property.\n";
+    std::cout << "    - buy/sell : Buy to improve or sell to remove an improvement.\n";
+    std::cout << "mortgage <property>  : Mortgage a property to gain cash.\n";
+    std::cout << "unmortgage <property>: Unmortgage a property by paying back.\n";
+    std::cout << "bankrupt             : Declare bankruptcy if you cannot pay your dues.\n";
+    std::cout << "assets               : Display the assets of the current player.\n";
+    std::cout << "all                  : Display the assets of all players.\n";
+    std::cout << "save <filename>      : Save the current game state to a file.\n";
+    std::cout << "quit                 : Exit the game.\n";
+    std::cout << "-------------------------------------------------\n\n";
+}
+
+
 Player* Board::getCurrentPlayer() {
     return allPlayers[currentPlayerIndex];
 }
@@ -510,11 +535,16 @@ void Board::forceMoveToDC(Player *p) {
 void Board::gameLoop() {
     std::string input;
     while (true) {
+        displayCommands();  // Automatically display commands before each player's input
+
         std::cout << "\n[" << getCurrentPlayer()->getName() << "] > ";
+        std::string input;
         std::getline(std::cin, input);
+
         if (input == "quit") break;
         handleCommand(input);
     }
+
 }
 
 void Board::handleCommand(const std::string &input) {
