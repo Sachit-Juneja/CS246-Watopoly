@@ -30,6 +30,6 @@ std::string Buildings::getName() const {
     return building_name;
 }
 
-int Buildings::getIndex(){
+int Buildings::getPosition(){
     return POS;
 }

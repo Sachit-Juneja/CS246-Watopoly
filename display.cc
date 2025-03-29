@@ -35,7 +35,7 @@ int* getCoordinates(int p, int arr[]) {
 
 void Display::draw(vector<Buildings*> buildings){
     for(Buildings *b: buildings){
-        int position = b->getIndex();
+        int position = b->getPosition();
         int coords[2] = {0,0};
         getCoordinates(position, coords);
         grid[coords[0]][coords[1]]->assignBuilding(b);
