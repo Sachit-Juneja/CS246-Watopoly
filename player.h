@@ -13,6 +13,7 @@ class Buildings; // forward declaration
 class Player {
 
     std::string name;
+    std::string actualName;
     char icon;
     int charNum; // 1-8
     int currentPosition = 0;
@@ -37,12 +38,14 @@ class Player {
     public:
         // static std::vector<char> players; 
 
-        Player(int character); // Constructor
+        Player(int character, std::string actualName); // Constructor
         void setPosition(int building);
         int getPosition(); 
         std::string getName();
         int getCharNum();
         char getIcon();
+        // We don't have a setter for actual name as it should only be required during the construction of Player
+        std::string getActualName();
 
         int getTimCups();
         void setTimCups(int cups);
