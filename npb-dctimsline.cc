@@ -7,6 +7,7 @@ DCTimsLine::DCTimsLine(): NonPropertyBuilding{"DC Tims Line", 10} {
 void DCTimsLine::event(Player * p) {
     // If not in line
     if (p->getTimsLine() == 0) {
+        cout << "You arrive at the DC Tims Line but you are not hungry. Nothing else occurs." << endl;
         return;
     }
 
