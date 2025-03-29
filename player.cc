@@ -151,7 +151,7 @@ int Player::getNumAcademicBuildingsOwned() {
 }
 
 bool Player::hasMonopoly(string Faculty) {
-    map<string, int> monopoly_map = {{"Arts1", 3}, {"Arts2", 3},
+    map<string, int> monopoly_map = {{"Arts1", 2}, {"Arts2", 3},
                                      {"Eng", 3}, {"Health", 3},
                                      {"Env", 3}, {"Sci1", 3},
                                      {"Sci2", 3}, {"Math", 2}};

@@ -52,6 +52,7 @@ void PBAcademicBuilding::event(Player *p, std::vector<Player *> allPlayers) {
             if (p->getMoney() >= getCost()) {
                 p->addMoney(-getCost());
                 setOwner(p);
+                p->addBuilding(this);
                 std::cout << p->getName() << " bought " << getName() << " for $" << getCost() << "." << std::endl;
             } else {
                 std::cout << "Not enough money. Auction begins!" << std::endl;
