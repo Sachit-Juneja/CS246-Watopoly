@@ -14,7 +14,7 @@ int main() {
     prng1.seed( seed );
     std::string input;
     Board b = Board();
-    Display d = Display(&b, b.allBuildings);
+    Display d(&b, b.allBuildings);
     b.attachObservers(&d);
 
     cout << "Welcome to Watopoly!" << endl; 

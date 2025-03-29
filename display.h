@@ -9,9 +9,9 @@ class Display : public Observer{
     //Square *s; // to represent and render each building
     vector< vector<Square*>> grid;
     public:
-        Display(Board *board, const vector<Buildings*>&buildings); 
+        Display(Board *board, const vector<Buildings*>& buildings); 
         void draw(vector<Buildings *> buildings); // buildings comes from "allBuildings" field in board, b. 
-        void notify(); // redraws the current state of the grid. Called by the board through notifyObservers() when there is some change in the state. 
+        void notify() override; // redraws the current state of the grid. Called by the board through notifyObservers() when there is some change in the state. 
 };
 
 #endif

@@ -29,3 +29,7 @@ std::vector<Player*> Buildings::getCurrentPlayer() {
 std::string Buildings::getName() const {
     return building_name;
 }
+
+int Buildings::getIndex(){
+    return POS;
+}
