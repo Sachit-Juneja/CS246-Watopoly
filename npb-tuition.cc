@@ -9,7 +9,6 @@ void NPBTuition::event(Player *p) {
     std::cout << p->getName() << " has landed on Tuition." << std::endl;
 
     // Assume total worth = money only for now (can expand later)
-    int playerMoney = p->getMoney();
     int tenPercent = p->getTotalAssets() / 10;
     
     std::cout << "Choose payment option:\n"
