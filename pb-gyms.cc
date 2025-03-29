@@ -19,6 +19,7 @@ void PBGyms::event(Player *p, std::vector<Player *> allPlayers, int rollTotal) {
             if (p->getMoney() >= getCost()) {
                 p->addMoney(-getCost());
                 setOwner(p);
+                p->addBuilding(this); // new addition
                 std::cout << p->getName() << " bought " << getName() << " for $" << getCost() << "." << std::endl;
             } else {
                 std::cout << "Insufficient funds. Auctioning..." << std::endl;
