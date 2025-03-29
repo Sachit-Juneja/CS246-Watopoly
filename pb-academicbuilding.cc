@@ -50,8 +50,12 @@ void PBAcademicBuilding::event(Player *p, std::vector<Player *> allPlayers) {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Clear buffer
         if (c == 'y' || c == 'Y') {
             if (p->getMoney() >= getCost()) {
+                if(PropertyBuildingsNew::getOwner() && (PropertyBuildingsNew::getOwner() != p)){
+                    PropertyBuildingsNew::getOwner()->removeBuilding(this);
+                } // changes added to make sure proper transfership of ownership is done. 
                 p->addMoney(-getCost());
                 setOwner(p);
+                p->addBuilding(this); // changes added to make sure proper transfership of ownership is done. 
                 std::cout << p->getName() << " bought " << getName() << " for $" << getCost() << "." << std::endl;
             } else {
                 std::cout << "Not enough money. Auction begins!" << std::endl;
@@ -70,8 +74,12 @@ void PBAcademicBuilding::event(Player *p, std::vector<Player *> allPlayers) {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Clear buffer
             if (c == 'y' || c == 'Y') {
                 if (p->getMoney() >= discount) {
+                    if(PropertyBuildingsNew::getOwner() && (PropertyBuildingsNew::getOwner() != p)){
+                        PropertyBuildingsNew::getOwner()->removeBuilding(this);
+                    }
                     p->addMoney(-discount);
                     setOwner(p);
+                    p->addBuilding(this);
                     unmortgage();
                     std::cout << p->getName() << " bought the mortgaged property and unmortgaged it.\n";
                 } else {
