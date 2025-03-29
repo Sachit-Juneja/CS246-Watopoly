@@ -209,7 +209,7 @@ Board::Board() {
 }
 
 void Board::newGame() {
-    cout << "Please select the number of players (2-8): " << endl;
+    cout << "Please select the number of players (2-6): " << endl;
     int numPlayers;
 
     while (true) {
@@ -228,8 +228,8 @@ void Board::newGame() {
             }
         }
 
-        if (numPlayers < 2 || numPlayers > 8) {
-            cout << "Invalid number of players. Please select a number between 2 and 8." << endl;
+        if (numPlayers < 2 || numPlayers > 6) {
+            cout << "Invalid number of players. Please select a number between 2 and 6." << endl;
         } else {
             break;
         }
@@ -239,7 +239,27 @@ void Board::newGame() {
 
     int i = 0;
     while (i < numPlayers) {
-        cout << "Player " << i + 1 << " , please select a character (Type 1-8): " << endl;
+        // Player Name Input
+        cout << "Player " << i + 1 << " , please enter your name: " << endl;
+        string realName;
+        while (true) {
+            cin >> realName;
+            if (!cin) {
+                if (cin.eof()) {
+                    cout << "EOF DETECTED IN NAME INPUT. EXITING GAME." << endl;
+                } else {
+                    cout << "Invalid Input. Please enter a valid name." << endl;
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                    continue;
+                }
+            }
+            cin.ignore(1000, '\n'); // Make sure that the player only entered a single word for their name, ignore rest of line. 
+            break;
+        }
+        
+        // Character Selection
+        cout << "Hello " << realName << "! Please select a character (Type 1-8): " << endl;
         cout << "1. Goose" << endl;
         cout << "2. GRT Bus" << endl;
         cout << "3. Tim Hortons Doughnut" << endl;
@@ -248,7 +268,7 @@ void Board::newGame() {
         cout << "6. Money" << endl;
         cout << "7. Laptop" << endl;
         cout << "8. Pink tie" << endl;
-        
+
         int character;
         while (true) {
             cin >> character;
@@ -280,7 +300,7 @@ void Board::newGame() {
             } else if (alreadyChosen) {
                 cout << "Character already selected. Please select a different character." << endl;
             } else {
-                allPlayers.emplace_back(new Player(character));
+                allPlayers.emplace_back(new Player(character, realName));
                 break;
             }
         }
@@ -288,15 +308,179 @@ void Board::newGame() {
     }
 
     cout << "All players have been selected. Starting game..." << endl;
-    //notifyObservers(); // Addition: for updating display.
 }
 
 void Board::loadGame(fstream& loadFile) {
+    // Load the number of players
+    int numPlayers;
+    loadFile >> numPlayers;
 
+    // 1. Load basic player info
+    for (int i = 0; i < numPlayers; i++) {
+
+        string realName;
+        char icon;
+        int timCups;
+        int money;
+        int position;
+        int timsLineBool;
+        int timsLine;
+
+        loadFile >> realName >> icon >> timCups >> money >> position;
+
+        int charNum;
+        if (icon == 'G') {
+            charNum = 1;
+        } else if (icon == 'B') {
+            charNum = 2;
+        } else if (icon == 'D') {
+            charNum = 3;
+        } else if (icon == 'P') {
+            charNum = 4;
+        } else if (icon == 'S') {
+            charNum = 5;
+        } else if (icon == '$') {
+            charNum = 6;
+        } else if (icon == 'L') {
+            charNum = 7;
+        } else if (icon == 'T') {
+            charNum = 8;
+        } else {
+            cout << "LOAD ICON ERROR (LINE SHOULD NOT BE REACHED)" << endl;
+            continue;
+        }
+
+        allPlayers.emplace_back(new Player(charNum, realName));
+        Player* p = allPlayers.back();
+        p->setTimCups(timCups);
+        p->addMoney(money - 1500); // subtract the starting amount
+        p->setPosition(position);
+
+        // If in tims line
+        if (position == 10) {
+            loadFile >> timsLineBool;
+            if (timsLineBool == 1) {
+                loadFile >> timsLine;
+                p->setTimsLine(timsLine + 1);
+            } else {
+                p->setTimsLine(0);
+            }
+        }  
+        
+        allBuildings[position]->addPlayer(p);
+    }
+
+    // 2. Load building info
+    // loop through all property buildings using dynamic casting and then set building properties
+    for (int i = 0; i < 40; i++) {
+
+        auto *building = dynamic_cast<PropertyBuildingsNew *>(allBuildings[i]); // This is just to check type dynamically
+        PropertyBuildingsNew *pb = dynamic_cast<PropertyBuildingsNew *>(allBuildings[i]); // Current building
+
+        if (!building) {
+            continue; // skip non-ownable buildings
+        } else {
+            string buildingName;
+            string ownerName;
+            int improvements;
+
+            loadFile >> buildingName;
+            
+            // Since Player names can have spaces, we need to read until we find an integer (improvements)
+            string tempOwnerName;
+            while (true) {
+                loadFile >> tempOwnerName;
+                istringstream iss(tempOwnerName);
+                
+                if (iss >> improvements) {
+                    break;
+                } else {
+                    if (ownerName.empty()) {
+                        ownerName += tempOwnerName;
+                    } else {
+                        ownerName += " " + tempOwnerName;
+                    }
+                }
+                
+            }
+            
+            if (buildingName != pb->getName()) {
+                cout << "LOAD BUILDING ERROR (LINE SHOULD NOT BE REACHED): " << buildingName <<  " DOES NOT MATCH WITH " << pb->getName() << endl;
+                continue;
+            }
+
+            // Set owner and add building to owner
+            if (ownerName == "BANK") {
+                pb->setOwner(nullptr);
+            } else {
+                for (Player* p : allPlayers) {
+                    if (p->getActualName() == ownerName) {
+                        pb->setOwner(p);
+                        p->addBuilding(pb);
+                        break;
+                    } else {
+                        continue;
+                        // THIS IS FOR TESTING PURPOSES ONLY, IT WILL ALWAYS RETURN AN ERROR IGNORE ERRORS: cout << ownerName << " OWNER MISMATCH DETECTED IN LOAD GAME WITH " << p->getActualName() << endl; 
+                    }
+                }
+            }
+
+            // Set improvements
+            if (improvements == -1) {
+                pb->mortgage();
+            } else if (improvements == 0) {
+                //do nothing
+            } else {
+                for (int i = 0; i < improvements; i++) {
+                    // Since gyms and residences will never have improvements > 0, we can safely cast. 
+                    dynamic_cast<PBAcademicBuilding *>(pb)->improve();
+                }
+            }
+        }
+    }
+
+    // Print Out Load Success Function
+    for (int i = 0; i < 99; i++) {
+        cout << "-";
+    }
+    cout << endl;
+
+    cout << "Game loaded successfully. Welcome back!" << endl;
+
+    for (int i = 0; i < 99; i++) {
+        cout << "-";
+    }
+    cout << endl << endl;
 }
 
+void Board::transferAssets(Player *from, Player *to) {
+    for (auto *b : from->getBuildingsOwned()) {
+        b->addPlayer(to);
+        to->addBuilding(b);
+        std::cout << b->getName() << " transferred to " << to->getName() << "." << std::endl;
+    }
+    to->addMoney(from->getMoney());
+    from->addMoney(-from->getMoney());
+    from->clearProperties();
+}
 
+void Board::returnAssetsToBank(Player *p) {
+    for (auto *b : p->getBuildingsOwned()) {
+        b->addPlayer(nullptr);
+        std::cout << b->getName() << " is now available for auction." << std::endl;
+    }
+    p->addMoney(-p->getMoney()); // Set money to zero
+    p->clearProperties();
+}
 
+void Board::removePlayer(Player *p) {
+    auto it = std::find(allPlayers.begin(), allPlayers.end(), p);
+    if (it != allPlayers.end()) {
+        std::cout << p->getName() << " has been removed from the game." << std::endl;
+        allPlayers.erase(it);
+        delete p;
+    }
+}
 
 Player* Board::getCurrentPlayer() {
     return allPlayers[currentPlayerIndex];
@@ -312,7 +496,10 @@ Buildings* Board::getBuildingByName(const std::string &name) {
 void Board::advanceTurn() {
     doublesRolled = 0;
     currentPlayerIndex = (currentPlayerIndex + 1) % allPlayers.size();
+    hasRolled = false; // Reset the roll for the next player's turn
+    std::cout << "It's now " << getCurrentPlayer()->getName() << "'s turn.\n";
 }
+
 
 void Board::forceMoveToDC(Player *p) {
     std::cout << p->getName() << " rolled 3 doubles in a row! Sent to DC Tims Line." << std::endl;
@@ -337,11 +524,18 @@ void Board::handleCommand(const std::string &input) {
     Player *p = getCurrentPlayer();
 
     if (cmd == "roll") {
+        if (hasRolled) {
+            std::cout << "You have already rolled this turn. Use 'next' to end your turn.\n";
+            return;
+        }
+    
         int total = dice.roll();
         int die1 = dice.getDie1();
         int die2 = dice.getDie2();
         std::cout << "You rolled: " << die1 << " + " << die2 << " = " << total << std::endl;
-
+    
+        hasRolled = true; // Mark roll as done for this turn
+    
         if (dice.checkDouble()) {
             ++doublesRolled;
             if (doublesRolled == 3) {
@@ -354,15 +548,18 @@ void Board::handleCommand(const std::string &input) {
             std::cout << "Landed on " << allBuildings[newPos]->getName()
                       << " (double rolled, will roll again)\n";
             notifyObservers();
-            handleCommand("roll");
+            // Allow rolling again if doubles (still within turn)
+            hasRolled = false;
             return;
         }
-
+    
         doublesRolled = 0;
         int newPos = p->move(total);
         Buildings *b = allBuildings[newPos];
         std::cout << "You landed on: " << b->getName() << std::endl;
         notifyObservers();
+    
+        // Trigger building-specific effects
         if (auto *gym = dynamic_cast<PBGyms *>(b)) {
             gym->event(p, allPlayers, total);
         } else if (auto *res = dynamic_cast<PBResidences *>(b)) {
@@ -373,6 +570,7 @@ void Board::handleCommand(const std::string &input) {
             b->event(p);
         }
     }
+    
 
     else if (cmd == "next") {
         advanceTurn();
@@ -592,9 +790,37 @@ void Board::handleCommand(const std::string &input) {
     
 
     else if (cmd == "bankrupt") {
-        // GG. work on it
-        std::cout << "You cannot declare bankruptcy manually. It occurs automatically when needed. LMAO SUCKER!\n";
+        Player *p = getCurrentPlayer();
+        if (!p->getBankruptcy()) {
+            std::cout << "You cannot declare bankruptcy at this time. You must be unable to pay a debt." << std::endl;
+            return;
+        }
+    
+        // Determine creditor (if applicable)
+        Player *creditor = nullptr;
+        for (auto *b : allBuildings) {
+            PropertyBuildingsNew *pb = dynamic_cast<PropertyBuildingsNew *>(b);
+            if (pb && pb->getOwner() && pb->getOwner() != p && p->getPosition() == dynamic_cast<Buildings *>(pb)->getPosition()) {
+                creditor = pb->getOwner();
+                break;
+            }
+        }
+    
+        // Finalize bankruptcy
+        std::cout << p->getName() << " has declared bankruptcy!" << std::endl;
+        if (creditor) {
+            std::cout << "Assets will be transferred to " << creditor->getName() << "." << std::endl;
+            transferAssets(p, creditor);
+        } 
+        else {
+            std::cout << "All assets are returned to the bank." << std::endl;
+            returnAssetsToBank(p);
+        }
+    
+        removePlayer(p);
     }
+    
+    
 
     else if (cmd == "save") {
         std::string filename;
@@ -615,7 +841,7 @@ void Board::handleCommand(const std::string &input) {
         
         // 2. Player info
         for (auto *pl : allPlayers) {
-            out << pl->getName() << " "
+            out << pl->getActualName() << " "
                 << pl->getIcon() << " "
                 << pl->getTimCups() << " "
                 << pl->getMoney() << " "
@@ -624,7 +850,7 @@ void Board::handleCommand(const std::string &input) {
             if (pl->getPosition() == 10) {
                 int timsLine = pl->getTimsLine();  // Number of turns in DC Tims Line
                 if (timsLine > 0) {
-                    out << " 1 " << timsLine;  // In line
+                    out << " 1 " << (timsLine - 1);  // In line
                 } else {
                     out << " 0";  // On the square, not in line
                 }
@@ -639,7 +865,7 @@ void Board::handleCommand(const std::string &input) {
             auto *pb = dynamic_cast<PropertyBuildingsNew *>(b);
             if (!pb) continue; // skip non-ownable buildings
     
-            std::string ownerName = pb->getOwner() ? pb->getOwner()->getName() : "BANK";
+            std::string ownerName = pb->getOwner() ? pb->getOwner()->getActualName() : "BANK";
             int improvements = 0;
     
             if (auto *aca = dynamic_cast<PBAcademicBuilding *>(pb)) {
