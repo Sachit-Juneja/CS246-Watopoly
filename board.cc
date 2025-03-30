@@ -670,7 +670,6 @@ void Board::handleCommand(const std::string &input) {
 
     if (cmd == "roll") {
         if (hasRolled) {
-            std::cout << "You have already rolled this turn. Use 'next' to end your turn.\n";
             return;
         }
     
