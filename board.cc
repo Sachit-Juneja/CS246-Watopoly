@@ -777,12 +777,16 @@ void Board::handleCommand(const std::string &input) {
         int cost = b->getImprovementCost();
 
         if (action == "buy") {
-            if (p->getMoney() >= cost) {
+            if(b->getImprovementLevel() >= 5){
+                cout << "Cannot add any more improvements for " << name << endl;
+                return;
+            }
+            if(p->getMoney() >= cost) {
                 b->improve();
                 p->addMoney(-cost);
                 std::cout << "Improved " << name << " for $" << cost << ".\n";
                 notifyObservers();
-            } else {
+            }else{
                 std::cout << "Not enough money.\n";
             }
         } else if (action == "sell") {
