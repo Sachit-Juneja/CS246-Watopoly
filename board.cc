@@ -574,6 +574,7 @@ void Board::gameLoop() {
     std::string input;
     
     while (allPlayers.size() > 1) {  // Continue the game while more than one player is left
+        displayCommands();
         std::cout << "\n[" << getCurrentPlayer()->getName() << "] > ";
         std::getline(std::cin, input);
 
