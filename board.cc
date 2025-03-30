@@ -784,27 +784,70 @@ void Board::handleCommand(const std::string &input) {
         // Execute trade
         if (giveIsMoney) {
             int money = std::stoi(give);
+            PropertyBuildingsNew *prop = dynamic_cast<PropertyBuildingsNew *>(getBuildingByName(receive));
+
+            bool hasimprovement = false;
+            
+            // Check if the property an academic building
+            PBAcademicBuilding *receiveAcademicBuilding = dynamic_cast<PBAcademicBuilding *>(prop);
+            if (receiveAcademicBuilding && other->hasMonopoly(receiveAcademicBuilding->getFaculty())) {
+                for (Buildings *b : other->getBuildingsOwned()) { // Pretty sure it's better if getBuildingsOwned() returns a propertyBuilding, but I'll keep it this way for now.
+                    PBAcademicBuilding *iterateAcademicBuilding = dynamic_cast<PBAcademicBuilding *>(b);
+
+                    if ((iterateAcademicBuilding->getImprovementLevel() > 0) && (iterateAcademicBuilding->getFaculty() == receiveAcademicBuilding->getFaculty())) {
+                        hasimprovement = true;
+                        break;
+                    }
+                }
+            }
+
             if (p->getMoney() < money) {
                 std::cout << "Not enough funds to trade.\n";
                 return;
             }
-            auto *prop = dynamic_cast<PropertyBuildingsNew *>(getBuildingByName(receive));
             if (!prop || prop->getOwner() != other) {
                 std::cout << "They don't own the requested property.\n";
+                return;
+            }
+            if(hasimprovement){
+                std::cout << "You cannot trade a monopoly with improvements. Please sell all improvements first.\n";
                 return;
             }
             p->addMoney(-money);
             other->addMoney(money);
             prop->setOwner(p);
-        } else if (receiveIsMoney) {
+        } else if (receiveIsMoney) { 
+            // ----------------------------
+            // Recieve Money, Give Property
+            // ----------------------------
             int money = std::stoi(receive);
+            auto *prop = dynamic_cast<PropertyBuildingsNew *>(getBuildingByName(give));
+
+            bool hasimprovement = false;
+            
+            // Check if the property an academic building
+            PBAcademicBuilding *receiveAcademicBuilding = dynamic_cast<PBAcademicBuilding *>(prop);
+            if (receiveAcademicBuilding && p->hasMonopoly(receiveAcademicBuilding->getFaculty())) {
+                for (Buildings *b : p->getBuildingsOwned()) { // Pretty sure it's better if getBuildingsOwned() returns a propertyBuilding, but I'll keep it this way for now.
+                    PBAcademicBuilding *iterateAcademicBuilding = dynamic_cast<PBAcademicBuilding *>(b);
+
+                    if ((iterateAcademicBuilding->getImprovementLevel() > 0) && (iterateAcademicBuilding->getFaculty() == receiveAcademicBuilding->getFaculty())) {
+                        hasimprovement = true;
+                        break;
+                    }
+                }
+            }
+
             if (other->getMoney() < money) {
                 std::cout << "They don't have enough money.\n";
                 return;
             }
-            auto *prop = dynamic_cast<PropertyBuildingsNew *>(getBuildingByName(give));
             if (!prop || prop->getOwner() != p) {
                 std::cout << "You don't own the given property.\n";
+                return;
+            }
+            if(hasimprovement){
+                std::cout << "You cannot trade a monopoly with improvements. Please sell all improvements first.\n";
                 return;
             }
             p->addMoney(money);
