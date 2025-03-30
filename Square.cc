@@ -15,7 +15,7 @@ void Square::removePlayer(Player* p){
     }
 }
 string Square::render(int line_number) {
-    const int WIDTH = 15;
+    const int WIDTH = 11;
     string result;
 
     if (!building) {
