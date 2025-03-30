@@ -1,4 +1,5 @@
 #include "npb-dctimsline.h"
+#include <limits>
 
 DCTimsLine::DCTimsLine(): NonPropertyBuilding{"DC Tims Line", 10} {
 
@@ -20,6 +21,7 @@ void DCTimsLine::event(Player * p) {
     
     while (true) {
         cin >> playerInput;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Clear buffer
         
         // If player pays, deduct money and exit line
         if (playerInput == "pay") {
