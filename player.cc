@@ -68,6 +68,7 @@ int Player::move(int spaces) {
     if (currentPosition + spaces > 39) {
         // If the player goes past the last building, they get $200
         addMoney(200);
+        cout << "Congratulations! You passed OSAP and received $200!" << endl;
     }
     currentPosition = (((currentPosition + spaces) % 40) + 40) % 40; 
     return currentPosition;
