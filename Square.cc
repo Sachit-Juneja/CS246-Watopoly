@@ -15,7 +15,7 @@ void Square::removePlayer(Player* p){
     }
 }
 string Square::render(int line_number) {
-    const int WIDTH = 11;
+    const int WIDTH = 13;
     string result;
 
     if (!building) {
@@ -75,56 +75,6 @@ string Square::render(int line_number) {
 
     return result;
 }
-
-// string Square::render(int line_number) {
-//     ostringstream result;
-
-//     // If no building is assigned, return 9 spaces
-//     if (!building) {
-//         result << "         ";
-//         return result.str();
-//     }
-
-//     // Casts
-//     auto* aca = dynamic_cast<PBAcademicBuilding*>(building);
-
-//     switch (line_number) {
-//         case 0:
-//         case 4:
-//             result << "+-------+";
-//             break;
-//         case 1: {
-//             result << "|";
-//             if (aca) {
-//                 int level = aca->getImprovementLevel();
-//                 for (int i = 0; i < level && i < 7; ++i)
-//                     result << "I";
-//                 result << string(7 - min(level, 7), ' ');
-//             } else {
-//                 result << "       ";
-//             }
-//             result << "|";
-//             break;
-//         }
-//         case 2: {
-//             result << "|";
-//             string name = building->getName();
-//             if (name.length() > 7) name = name.substr(0, 7);
-//             result << name << string(7 - name.length(), ' ') << "|";
-//             break;
-//         }
-//         case 3: {
-//             result << "|";
-//             string icons;
-//             for (auto* p : PlayersList) icons += p->getIcon();
-//             result << icons << string(7 - icons.length(), ' ') << "|";
-//             break;
-//         }
-//     }
-
-//     return result.str();
-// }
-
 
 void Square::clearPlayers(){
     PlayersList.clear();
