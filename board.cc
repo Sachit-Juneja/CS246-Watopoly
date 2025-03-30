@@ -257,8 +257,36 @@ void Board::newGame() {
                 }
             }
             cin.ignore(1000, '\n'); // Make sure that the player only entered a single word for their name, ignore rest of line. 
+            
+            // Check if the name is already taken or is bank
+            if (realName == "BANK") {
+                cout << "Name can not be BANK. Please choose a different name." << endl;
+                continue;
+            } else {
+                bool nameTaken = false;
+
+                for (Player* player : allPlayers) {
+                    if (player->getActualName() == realName) {
+                        cout << "Name already taken. Please choose a different name." << endl;
+                        nameTaken = true;
+                        break;
+                    }
+                }
+
+                if (nameTaken) {
+                    continue;
+                }
+            }
+
+            // Check if the name contains numeric characters
+            if (std::any_of(realName.begin(), realName.end(), ::isdigit)) {
+                cout << "Name cannot contain numbers. Please choose a different name." << endl;
+                continue;
+            }
+            
             break;
         }
+
         
         // Character Selection
         cout << "Hello " << realName << "! Please select a character (Type 1-8): " << endl;
