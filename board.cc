@@ -616,41 +616,45 @@ void Board::handleCommand(const std::string &input) {
             if (dice.checkDouble()) {
                 ++doublesRolled;
     
-                // If In DC Tims Line, we recent.
+                // If In DC Tims Line, we continue the turn.
                 if (p->getPosition() == 10 && p->getTimsLine() >= 1 && p->getTimsLine() <= 3) {
                     p->setTimsLine(0);
-                    std::cout << "You rolled doubles while in DC Tims Line. You can move again.\n";
-                }
-    
-                if (doublesRolled == 3) {
+                    std::cout << "You rolled doubles and escaped the DC Tims Line!\n";
+                } else if (doublesRolled == 3) {
                     forceMoveToDC(p);
                     notifyObservers();
                     advanceTurn();
                     return;
+                } else {
+                    int newPos = p->move(total);
+                    std::cout << "Landed on " << allBuildings[newPos]->getName()
+                              << " (double rolled, will roll again)\n";
+                    notifyObservers();
+                    // Allow rolling again if doubles (still within turn)
+                    hasRolled = false;
+                    return;
                 }
-                int newPos = p->move(total);
-                std::cout << "Landed on " << allBuildings[newPos]->getName()
-                          << " (double rolled, will roll again)\n";
-                notifyObservers();
-                // Allow rolling again if doubles (still within turn)
-                hasRolled = false;
-                return;
             }
             
             // If not a double, check for DC Tims Line or Move.
             doublesRolled = 0;
             int newPos = p->getPosition(); // Default value of new Position before moving
             Buildings *b = allBuildings[newPos]; // Default value of building before moving
+    
             if (p->getPosition() == 10 && p->getTimsLine() >= 1 && p->getTimsLine() <= 3) {
                 std::cout << "You did not roll doubles while in DC Tims Line. You are still in line.\n";
-            } else {
-                newPos = p->move(total);
-                b = allBuildings[newPos];
-                std::cout << "You landed on: " << b->getName() << std::endl;
+                b->event(p);
+                if (p->getTimsLine() == 0) {
+                    cout << "You have been released from the DC Tims Line!\n";
+                } else {
+                    return;
+                }
             }
-            notifyObservers();
     
-        
+            newPos = p->move(total);
+            b = allBuildings[newPos];
+            std::cout << "You landed on: " << b->getName() << std::endl;
+            notifyObservers();
             // Trigger building-specific effects
             if (auto *gym = dynamic_cast<PBGyms *>(b)) {
                 gym->event(p, allPlayers, total);
@@ -681,41 +685,45 @@ void Board::handleCommand(const std::string &input) {
         if (dice.checkDouble()) {
             ++doublesRolled;
 
-            // If In DC Tims Line, we recent.
+            // If In DC Tims Line, we continue the turn.
             if (p->getPosition() == 10 && p->getTimsLine() >= 1 && p->getTimsLine() <= 3) {
                 p->setTimsLine(0);
-                std::cout << "You rolled doubles while in DC Tims Line. You can move again.\n";
-            }
-
-            if (doublesRolled == 3) {
+                std::cout << "You rolled doubles and escaped the DC Tims Line!\n";
+            } else if (doublesRolled == 3) {
                 forceMoveToDC(p);
                 notifyObservers();
                 advanceTurn();
                 return;
+            } else {
+                int newPos = p->move(total);
+                std::cout << "Landed on " << allBuildings[newPos]->getName()
+                          << " (double rolled, will roll again)\n";
+                notifyObservers();
+                // Allow rolling again if doubles (still within turn)
+                hasRolled = false;
+                return;
             }
-            int newPos = p->move(total);
-            std::cout << "Landed on " << allBuildings[newPos]->getName()
-                      << " (double rolled, will roll again)\n";
-            notifyObservers();
-            // Allow rolling again if doubles (still within turn)
-            hasRolled = false;
-            return;
         }
         
         // If not a double, check for DC Tims Line or Move.
         doublesRolled = 0;
         int newPos = p->getPosition(); // Default value of new Position before moving
         Buildings *b = allBuildings[newPos]; // Default value of building before moving
+
         if (p->getPosition() == 10 && p->getTimsLine() >= 1 && p->getTimsLine() <= 3) {
             std::cout << "You did not roll doubles while in DC Tims Line. You are still in line.\n";
-        } else {
-            newPos = p->move(total);
-            b = allBuildings[newPos];
-            std::cout << "You landed on: " << b->getName() << std::endl;
+            b->event(p);
+            if (p->getTimsLine() == 0) {
+                cout << "You have been released from the DC Tims Line!\n";
+            } else {
+                return;
+            }
         }
-        notifyObservers();
 
-    
+        newPos = p->move(total);
+        b = allBuildings[newPos];
+        std::cout << "You landed on: " << b->getName() << std::endl;
+        notifyObservers();
         // Trigger building-specific effects
         if (auto *gym = dynamic_cast<PBGyms *>(b)) {
             gym->event(p, allPlayers, total);

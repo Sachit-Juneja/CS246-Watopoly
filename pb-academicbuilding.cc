@@ -39,7 +39,6 @@ int PBAcademicBuilding::getImprovementLevel() {
 }
 
 void PBAcademicBuilding::event(Player *p, std::vector<Player *> allPlayers) {
-    std::cout << p->getName() << " landed on " << getName() << "." << std::endl;
     Auction auction;
     int rent = 0;
 
