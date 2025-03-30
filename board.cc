@@ -209,8 +209,6 @@ Board::Board(bool testingMode) : testingMode(testingMode) {
 }
 
 void Board::newGame() {
-    std::cout << "Welcome to Watopoly! Here are the available commands:\n";
-
     cout << "Please select the number of players (2-6): " << endl;
     int numPlayers;
 
