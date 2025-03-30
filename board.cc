@@ -810,7 +810,7 @@ void Board::handleCommand(const std::string &input) {
                 return;
             }
             if(hasimprovement){
-                std::cout << "You cannot trade a monopoly with improvements. Please sell all improvements first.\n";
+                std::cout << "You trade a building in a monopoly that has improvements. Please sell all improvements on the monopoly first.\n";
                 return;
             }
             p->addMoney(-money);
@@ -847,7 +847,7 @@ void Board::handleCommand(const std::string &input) {
                 return;
             }
             if(hasimprovement){
-                std::cout << "You cannot trade a monopoly with improvements. Please sell all improvements first.\n";
+                std::cout << "You cannot trade a building in a monopoly that has improvements. Please sell all improvements on the monopoly first.\n";
                 return;
             }
             p->addMoney(money);
@@ -915,9 +915,27 @@ void Board::handleCommand(const std::string &input) {
     else if (cmd == "mortgage") {
         std::string name;
         iss >> name;
-        auto *pb = dynamic_cast<PropertyBuildingsNew *>(getBuildingByName(name));
+        PropertyBuildingsNew *pb = dynamic_cast<PropertyBuildingsNew *>(getBuildingByName(name));
+
+        bool hasimprovement = false;
+        // Check if the property an academic building
+        PBAcademicBuilding *mortgageAcademicBuilding = dynamic_cast<PBAcademicBuilding *>(pb);
+        if (mortgageAcademicBuilding && p->hasMonopoly(mortgageAcademicBuilding->getFaculty())) {
+            for (Buildings *b : p->getBuildingsOwned()) { // Pretty sure it's better if getBuildingsOwned() returns a propertyBuilding, but I'll keep it this way for now.
+                PBAcademicBuilding *iterateAcademicBuilding = dynamic_cast<PBAcademicBuilding *>(b);
+                if ((iterateAcademicBuilding->getImprovementLevel() > 0) && (iterateAcademicBuilding->getFaculty() == mortgageAcademicBuilding->getFaculty())) {
+                    hasimprovement = true;
+                    break;
+                }
+            }
+        }
+
         if (!pb || pb->getOwner() != p || pb->isMortgaged()) {
             std::cout << "Cannot mortgage this property.\n";
+            return;
+        }
+        if(hasimprovement){
+            std::cout << "You cannot mortgage a building in a monopoly that has improvements. Please sell all improvements on the monopoly first.\n";
             return;
         }
         pb->mortgage();
@@ -951,7 +969,7 @@ void Board::handleCommand(const std::string &input) {
             return;
         }
     
-        std::cout << "\nAssets for " << p->getName() << ":\n";
+        std::cout << "\nAssets for " << p->getActualName() << " (" << p->getName() << "):\n";
         std::cout << "- Cash: $" << p->getMoney() << "\n";
         std::cout << "- Properties:\n";
     
@@ -981,7 +999,7 @@ void Board::handleCommand(const std::string &input) {
         }
     
         for (auto *pl : allPlayers) {
-            std::cout << "\nAssets for " << pl->getName() << ":\n";
+            std::cout << "\nAssets for " << pl->getActualName() << " (" << pl->getName() << "):\n";
             std::cout << "- Cash: $" << pl->getMoney() << "\n";
             std::cout << "- Properties:\n";
     
