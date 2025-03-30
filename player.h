@@ -22,6 +22,8 @@ class Player {
     int ownedResidences;
     int ownedGyms;
     bool bankrupt = false;
+    // int debt=0; // amount owed to other players
+    // Player * creditor = nullptr; // player to whom the debt is owed
 
     // TO DO: need to add the fields for the tims logic also. 
 

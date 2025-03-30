@@ -17,6 +17,12 @@ void Auction::start(PropertyBuildingsNew *property, const std::vector<Player *> 
     while (activePlayers.size() > 1) {
         for (auto it = activePlayers.begin(); it != activePlayers.end(); ) {
             Player *p = *it;
+            
+            // Remove bankrupt players
+            if (p->getBankruptcy()) {
+                it = activePlayers.erase(it); 
+                continue;
+            }
 
             std::cout << p->getName() << ", enter your bid (or 0 to skip): $";
             int bid;

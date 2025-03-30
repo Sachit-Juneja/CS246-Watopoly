@@ -497,9 +497,12 @@ void Board::transferAssets(Player *from, Player *to) {
 }
 
 void Board::returnAssetsToBank(Player *p) {
+    Auction auction;
     for (auto *b : p->getBuildingsOwned()) {
-        b->addPlayer(nullptr);
-        std::cout << b->getName() << " is now available for auction." << std::endl;
+        PropertyBuildingsNew *pb = dynamic_cast<PropertyBuildingsNew *>(b);
+        pb->addPlayer(nullptr);
+        std::cout << pb->getName() << " is now available for auction." << std::endl;
+        auction.start(pb, allPlayers);
     }
     p->addMoney(-p->getMoney()); // Set money to zero
     p->clearProperties();
