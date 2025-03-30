@@ -969,7 +969,7 @@ void Board::handleCommand(const std::string &input) {
             return;
         }
     
-        std::cout << "\nAssets for " << p->getName() << ":\n";
+        std::cout << "\nAssets for " << p->getActualName() << " (" << p->getName() << "):\n";
         std::cout << "- Cash: $" << p->getMoney() << "\n";
         std::cout << "- Properties:\n";
     
