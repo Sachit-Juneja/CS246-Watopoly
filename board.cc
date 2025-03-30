@@ -725,7 +725,7 @@ void Board::handleCommand(const std::string &input) {
         // sets other players pointer
         Player *other = nullptr;
         for (auto *pl : allPlayers) {
-            if (pl->getName() == otherPlayerName) {
+            if (pl->getActualName() == otherPlayerName) {
                 other = pl;
                 break;
             }
@@ -746,9 +746,10 @@ void Board::handleCommand(const std::string &input) {
         }
 
         // is accept/reject really worth it?
-        std::cout << other->getName() << ", do you accept the trade (y/n)? ";
+        std::cout << other->getActualName() << ", do you accept the trade (y/n)? ";
         char c;
         std::cin >> c;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         if (c != 'y' && c != 'Y') {
             std::cout << "Trade declined.\n";
             return;
