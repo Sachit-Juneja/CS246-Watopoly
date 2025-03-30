@@ -14,6 +14,7 @@ void Square::removePlayer(Player* p){
         PlayersList.erase(it);
     }
 }
+
 string Square::render(int line_number) {
     const int WIDTH = 15;
     string result;

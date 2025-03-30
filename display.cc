@@ -47,7 +47,6 @@ void Display::draw(vector<Buildings*> buildings){
     }
 }
 
-
 void Display::notify(){
     // Step 1: reset the set. 
     for(auto &i: grid){ // i is a vec
