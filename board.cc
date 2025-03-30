@@ -513,10 +513,16 @@ void Board::removePlayer(Player *p) {
     auto it = std::find(allPlayers.begin(), allPlayers.end(), p);
     if (it != allPlayers.end()) {
         std::cout << p->getName() << " has been removed from the game." << std::endl;
-        allPlayers.erase(it);
-        delete p;
+        allPlayers.erase(it);  // Remove the player from the list
+
+        // Check if only one player remains after removal
+        if (allPlayers.size() == 1) {
+            std::cout << "🏆 The winner is " << allPlayers[0]->getName() << "! Congratulations! 🎉" << std::endl;
+            exit(0);  // End the game immediately
+        }
     }
 }
+
 
 void Board::displayCommands() {
     std::cout << "\nAvailable Commands:\n";
@@ -568,18 +574,27 @@ void Board::forceMoveToDC(Player *p) {
 
 void Board::gameLoop() {
     std::string input;
-    while (true) {
-        displayCommands();  // Automatically display commands before each player's input
-
+    
+    while (allPlayers.size() > 1) {  // Continue the game while more than one player is left
         std::cout << "\n[" << getCurrentPlayer()->getName() << "] > ";
-        std::string input;
         std::getline(std::cin, input);
 
-        if (input == "quit") break;
-        handleCommand(input);
-    }
+        if (input == "quit") {
+            std::cout << "Game ended manually. Goodbye!" << std::endl;
+            break;
+        }
 
+        // Handle the player's command
+        handleCommand(input);
+
+        // Check if only one player is left after each command
+        if (allPlayers.size() == 1) {
+            std::cout << "The winner is " << allPlayers[0]->getName() << "! Congratulations!" << std::endl;
+            break;
+        }
+    }
 }
+
 
 void Board::handleCommand(const std::string &input) {
     std::istringstream iss(input);
@@ -920,35 +935,35 @@ void Board::handleCommand(const std::string &input) {
     
 
     else if (cmd == "bankrupt") {
-        Player *p = getCurrentPlayer();
         if (!p->getBankruptcy()) {
             std::cout << "You cannot declare bankruptcy at this time. You must be unable to pay a debt." << std::endl;
             return;
         }
     
-        // Determine creditor (if applicable)
+        // Determine creditor if applicable
         Player *creditor = nullptr;
         for (auto *b : allBuildings) {
             PropertyBuildingsNew *pb = dynamic_cast<PropertyBuildingsNew *>(b);
-            if (pb && pb->getOwner() != p && p->getPosition() == dynamic_cast<Buildings *>(pb)->getPosition()) {
+            if (pb && pb->getOwner() != p && p->getPosition() == pb->getPosition()) {
                 creditor = pb->getOwner();
                 break;
             }
         }
     
-        // Finalize bankruptcy
+        // Handle bankruptcy: Transfer assets or return to bank
         std::cout << p->getName() << " has declared bankruptcy!" << std::endl;
         if (creditor) {
-            std::cout << "Assets will be transferred to " << creditor->getName() << "." << std::endl;
+            std::cout << "Assets transferred to " << creditor->getName() << "." << std::endl;
             transferAssets(p, creditor);
-        } 
-        else {
-            std::cout << "All assets are returned to the bank." << std::endl;
+        } else {
+            std::cout << "All assets returned to the bank." << std::endl;
             returnAssetsToBank(p);
         }
     
+        // Remove the player from the game
         removePlayer(p);
     }
+    
     
     
 
