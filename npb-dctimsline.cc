@@ -43,7 +43,7 @@ void DCTimsLine::event(Player * p) {
             }
             
             // If any other input, skip the turn. 
-        } else {
+        } else if (playerInput == "skip") {
             if (p->getTimsLine() >= 3) {
                 cout << "You have been in line for 3 turns and can not skip. Select another option:" << endl;
                 continue;
@@ -52,6 +52,9 @@ void DCTimsLine::event(Player * p) {
                 cout << "You have decided to skip your turn." << endl;
                 break;
             }
+        } else {
+            cout << "Invalid input. Please enter 'pay', 'cup', or 'skip'." << endl;
+            continue;
         }
 
     }
