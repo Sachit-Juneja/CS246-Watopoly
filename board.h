@@ -36,6 +36,7 @@
 
 // Dice / Random
 #include "dice.h"
+#include "auction.h"
 
 // Observer pattern
 #include "observer-observer.h"
