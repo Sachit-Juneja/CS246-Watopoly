@@ -486,11 +486,18 @@ void Board::loadGame(fstream& loadFile) {
 }
 
 void Board::transferAssets(Player *from, Player *to) {
-    for (auto *b : from->getBuildingsOwned()) {
-        b->addPlayer(to);
+    for (Buildings *b : from->getBuildingsOwned()) {
+        PropertyBuildingsNew *pb = dynamic_cast<PropertyBuildingsNew *>(b);
+        pb->setOwner(to);
         to->addBuilding(b);
         std::cout << b->getName() << " transferred to " << to->getName() << "." << std::endl;
     }
+    // Transfer TimCups
+    while (from->getTimCups() > 0) {
+        from->setTimCups(from->getTimCups()-1);
+        to->setTimCups(to->getTimCups()+1);
+    }
+
     to->addMoney(from->getMoney());
     from->addMoney(-from->getMoney());
     from->clearProperties();
@@ -576,6 +583,9 @@ void Board::gameLoop() {
     
     while (allPlayers.size() > 1) {  // Continue the game while more than one player is left
         displayCommands();
+        if (getCurrentPlayer()->getMoney() < 0) {
+            cout << "YOU ARE IN DEBT. YOU MUST declare bankruptcy or mortgage some properties." << endl;
+        }
         std::cout << "\n[" << getCurrentPlayer()->getName() << "] > ";
         std::getline(std::cin, input);
 
@@ -583,7 +593,29 @@ void Board::gameLoop() {
             std::cout << "Game ended manually. Goodbye!" << std::endl;
             break;
         }
+        
+        // If in debt, must declare bankruptcy or mortgage properties
+        if (getCurrentPlayer()->getMoney() < 0) {
+            getCurrentPlayer()->setBankruptcy(true);
+            istringstream iss(input);
+            string firstWord;
+            iss >> firstWord;
+            if (firstWord == "bankrupt") {
+                
+            } else if (firstWord == "mortgage") {
+                
+            } else if (firstWord == "improve") {
+                
+            } else if (firstWord == "assets") {
+                
+            } else if (firstWord == "all") {
+                
+            } else if (firstWord == "save") {
 
+            } else {
+                continue; // Skip the command if not valid
+            }
+        }
         // Handle the player's command
         handleCommand(input);
 
@@ -666,6 +698,10 @@ void Board::handleCommand(const std::string &input) {
                 aca->event(p, allPlayers);
             } else {
                 b->event(p);
+                if (p->getTimsLine() == 1) {
+                    notifyObservers(); // Notify observers only if just sent to tims line
+                    cout << "You have been sent to DC Tims Line." << endl;
+                }
             }
         }
     }
@@ -1030,7 +1066,7 @@ void Board::handleCommand(const std::string &input) {
             std::cout << "You cannot declare bankruptcy at this time. You must be unable to pay a debt." << std::endl;
             return;
         }
-    
+
         // Determine creditor if applicable
         Player *creditor = nullptr;
         for (auto *b : allBuildings) {

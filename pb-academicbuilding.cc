@@ -100,14 +100,21 @@ void PBAcademicBuilding::event(Player *p, std::vector<Player *> allPlayers) {
             }
 
             // Check if the player can afford the tuition
-            if (p->getMoney() < rent) {
-                std::cout << p->getName() << " does not have enough money to pay the tuition of $" << rent << "." << std::endl;
-                std::cout << p->getName() << " must mortgage properties, trade, or declare bankruptcy." << std::endl;
-                p->setBankruptcy(true);  // Set bankruptcy but wait for explicit command
-                return; // Let Board handle the situation
-            } 
-            else {
-                p->addMoney(-rent);
+            p->addMoney(-rent);
+            if (p->getMoney() < 0) {
+                int playerTotalPayableAssets = p->getMoney() + ((p->getTotalAssets() - p->getMoney()) / 2);
+                if (playerTotalPayableAssets < rent) {
+
+                    cout << "The bank has calculated that you can not pay rent even after mortgaging all properties. Declaring Bankruptcy is highly recommended (or you can try to mortgage your properties to no avail.)" << endl;
+
+                } else {
+                    
+                    cout << "The bank has calculated that you can afford rent after mortgaging: " << p->getName() << " pays rent of $" << rent << " to " << getOwner()->getName() << " (You must now choose what to mortgage - highly recommended, or go bankrupt - not recommended)." << endl;
+
+                    getOwner()->addMoney(rent);
+
+                }
+            } else {
                 getOwner()->addMoney(rent);
                 std::cout << p->getName() << " pays tuition of $" << rent << " to " << getOwner()->getName() << "." << std::endl;
             }

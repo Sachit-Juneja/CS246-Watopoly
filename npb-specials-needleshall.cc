@@ -31,14 +31,7 @@ void NPBSpecialsNeedlesHall::event(Player *p) {
         std::cout << "gained $" << moneyChange << "!" << std::endl;
     }
     else {
-        if (p->getMoney() + moneyChange < 0) {
-            std::cout << "Insufficient funds! You cannot pay this amount. Declare bankruptcy or mortgage some properties!" << std::endl;
-            p->setBankruptcy(true);
-            return;
-        }
-        else {
-            p->addMoney(moneyChange);
-            std::cout << "lost $" << -moneyChange << "!" << std::endl;
-        }
+        p->addMoney(moneyChange);
+        std::cout << "lost $" << -moneyChange << "!" << std::endl;
     }
 }
