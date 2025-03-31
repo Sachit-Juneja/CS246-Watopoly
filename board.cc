@@ -583,7 +583,28 @@ void Board::gameLoop() {
             std::cout << "Game ended manually. Goodbye!" << std::endl;
             break;
         }
-
+        
+        // If in debt, must declare bankruptcy or mortgage properties
+        if(getCurrentPlayer()->getMoney() < 0) {
+            getCurrentPlayer()->setBankruptcy(true);
+            istringstream iss(input);
+            string firstWord;
+            iss >> firstWord;
+            cout << "You are in debt. Please declare bankruptcy or mortgage some properties." << endl;
+            if (firstWord == "bankrupt") {
+                break;
+            } else if (firstWord == "mortgage") {
+                break;
+            } else if (firstWord == "improve") {
+                break;
+            } else if (firstWord == "assets") {
+                break;
+            } else if (firstWord == "all") {
+                break;
+            } else {
+                cout << "Invalid command. YOU MUST declare bankruptcy or mortgage some properties." << endl;
+            }
+        }
         // Handle the player's command
         handleCommand(input);
 

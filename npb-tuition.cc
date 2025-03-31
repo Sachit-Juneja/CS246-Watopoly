@@ -20,13 +20,7 @@ void NPBTuition::event(Player *p) {
     std::cin >> choice;
     std::cin.ignore(1000, '\n');
     int payment = (choice == 2) ? tenPercent : 300;
-    if (payment > p->getMoney()) {
-        std::cout << "Insufficient funds! You cannot pay this amount. Declare bankruptcy or mortgage some properties!" << std::endl;
-        p->setBankruptcy(true);
-        return;
-    }
-    else {    
-        p->addMoney(-payment);
-    }
+
+    p->addMoney(-payment);
     std::cout << p->getName() << " paid $" << payment << " in tuition." << std::endl;
 }

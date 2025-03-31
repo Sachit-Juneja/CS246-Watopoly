@@ -56,18 +56,25 @@ void PBResidences::event(Player *p, std::vector<Player *> allPlayers) {
             int owned = getOwner()->getNumResidencesOwned(); // Owner's count
             int rent = (owned == 1 ? 25 : (owned == 2 ? 50 : (owned == 3 ? 100 : 200)));
 
-            // Check if the player can pay the rent
-            if (p->getMoney() < rent) {
-                std::cout << p->getName() << " does not have enough money to pay the rent of $" << rent << "." << std::endl;
-                std::cout << p->getName() << " must mortgage properties, trade, or declare bankruptcy." << std::endl;
-                p->setBankruptcy(true);  // Set bankruptcy but wait for explicit command
-                return; // Do nothing here. Board will handle the situation.
-            } 
-            else {
-                p->addMoney(-rent);
+            
+            // If player can not afford, figure out if they can still pay the full amount after mortgaging. Handle all other bankrupcy/mortgaging in the Board class. We only need this code here and not in the non property buildings as in those the player pays the bank the full amount (and goes bankrupt even if they can't afford it)
+            p->addMoney(-rent);
+            if (p->getMoney() < 0) {
+                int playerTotalPayableAssets = p->getMoney() + ((p->getTotalAssets() - p->getMoney()) / 2);
+                if (playerTotalPayableAssets < rent) {
+
+                    cout << "The bank has calculated that you can not pay rent even after mortgaging all properties. Therefore you will pay your remaining money of $" << playerTotalPayableAssets << ". Declaring Bankruptcy is highly recommended (or you can try to mortgage your properties but it won't work.)" << endl;
+
+                    getOwner()->addMoney(playerTotalPayableAssets);
+                } else {
+                    getOwner()->addMoney(rent);
+                    std::cout << p->getName() << " pays rent of $" << rent << " to " << getOwner()->getName() << "." << std::endl;
+                }
+            } else {
                 getOwner()->addMoney(rent);
                 std::cout << p->getName() << " pays rent of $" << rent << " to " << getOwner()->getName() << "." << std::endl;
             }
+
         }
     } 
     else {

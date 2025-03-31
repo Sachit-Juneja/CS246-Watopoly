@@ -57,15 +57,19 @@ void PBGyms::event(Player *p, std::vector<Player *> allPlayers, int rollTotal) {
             int rent = rollTotal * (gymsOwned == 2 ? 10 : 4);
 
             // Check if the player can pay the rent
-            if (p->getMoney() < rent) {
-                std::cout << p->getName() << " does not have enough money to pay the fee of $" << rent << "." << std::endl;
-                std::cout << p->getName() << " must mortgage properties, trade, or declare bankruptcy." << std::endl;
-                p->setBankruptcy(true);  // Set bankruptcy but wait for explicit command
-                return;  // Return control to Board
-            }
-            
-            else {
-                p->addMoney(-rent);
+            p->addMoney(-rent);
+            if (p->getMoney() < 0) {
+                int playerTotalPayableAssets = p->getMoney() + ((p->getTotalAssets() - p->getMoney()) / 2);
+                if (playerTotalPayableAssets < rent) {
+
+                    cout << "The bank has calculated that you can not pay rent even after mortgaging all properties. Therefore you will pay your remaining money of $" << playerTotalPayableAssets << ". Declaring Bankruptcy is highly recommended (or you can try to mortgage your properties but it won't work.)" << endl;
+
+                    getOwner()->addMoney(playerTotalPayableAssets);
+                } else {
+                    getOwner()->addMoney(rent);
+                    std::cout << p->getName() << " pays rent of $" << rent << " to " << getOwner()->getName() << "." << std::endl;
+                }
+            } else {
                 getOwner()->addMoney(rent);
                 std::cout << p->getName() << " pays rent of $" << rent << " to " << getOwner()->getName() << "." << std::endl;
             }
