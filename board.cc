@@ -576,6 +576,9 @@ void Board::gameLoop() {
     
     while (allPlayers.size() > 1) {  // Continue the game while more than one player is left
         displayCommands();
+        if (getCurrentPlayer()->getMoney() < 0) {
+            cout << "YOU ARE IN DEBT. YOU MUST declare bankruptcy or mortgage some properties." << endl;
+        }
         std::cout << "\n[" << getCurrentPlayer()->getName() << "] > ";
         std::getline(std::cin, input);
 
@@ -585,24 +588,23 @@ void Board::gameLoop() {
         }
         
         // If in debt, must declare bankruptcy or mortgage properties
-        if(getCurrentPlayer()->getMoney() < 0) {
+        if (getCurrentPlayer()->getMoney() < 0) {
             getCurrentPlayer()->setBankruptcy(true);
             istringstream iss(input);
             string firstWord;
             iss >> firstWord;
-            cout << "You are in debt. Please declare bankruptcy or mortgage some properties." << endl;
             if (firstWord == "bankrupt") {
-                break;
+                
             } else if (firstWord == "mortgage") {
-                break;
+                
             } else if (firstWord == "improve") {
-                break;
+                
             } else if (firstWord == "assets") {
-                break;
+                
             } else if (firstWord == "all") {
-                break;
+                
             } else {
-                cout << "Invalid command. YOU MUST declare bankruptcy or mortgage some properties." << endl;
+                continue; // Skip the command if not valid
             }
         }
         // Handle the player's command
