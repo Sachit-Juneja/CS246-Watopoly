@@ -698,6 +698,9 @@ void Board::handleCommand(const std::string &input) {
                 aca->event(p, allPlayers);
             } else {
                 b->event(p);
+                if (p->getTimsLine() == 1) {
+                    notifyObservers(); // Notify observers only if just sent to tims line
+                }
             }
         }
     }
