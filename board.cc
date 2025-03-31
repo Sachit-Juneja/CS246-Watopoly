@@ -696,6 +696,10 @@ void Board::handleCommand(const std::string &input) {
                 res->event(p, allPlayers);
             } else if (auto *aca = dynamic_cast<PBAcademicBuilding *>(b)) {
                 aca->event(p, allPlayers);
+            } else if (auto *slc = dynamic_cast<NPBSpecialsSLC *>(b)) {
+                slc->event(p);
+                notifyObservers();
+                allBuildings[p->getPosition()]->event(p); // Since SLC always moves the player. 
             } else {
                 b->event(p);
                 if (p->getTimsLine() == 1) {
@@ -712,7 +716,7 @@ void Board::handleCommand(const std::string &input) {
             cout << "You have already rolled! Please use 'next' to end your turn.\n" << endl;
             return;
         }
-        
+
         int total = dice.roll();
         int die1 = dice.getDie1();
         int die2 = dice.getDie2();
@@ -769,6 +773,10 @@ void Board::handleCommand(const std::string &input) {
             res->event(p, allPlayers);
         } else if (auto *aca = dynamic_cast<PBAcademicBuilding *>(b)) {
             aca->event(p, allPlayers);
+        } else if (auto *slc = dynamic_cast<NPBSpecialsSLC *>(b)) {
+            slc->event(p);
+            notifyObservers();
+            allBuildings[p->getPosition()]->event(p); // Since SLC always moves the player. 
         } else {
             b->event(p);
         }
