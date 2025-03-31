@@ -63,9 +63,8 @@ void PBResidences::event(Player *p, std::vector<Player *> allPlayers) {
                 int playerTotalPayableAssets = p->getMoney() + ((p->getTotalAssets() - p->getMoney()) / 2);
                 if (playerTotalPayableAssets < rent) {
 
-                    cout << "The bank has calculated that you can not pay rent even after mortgaging all properties. Therefore you will pay your remaining money of $" << playerTotalPayableAssets << ". Declaring Bankruptcy is highly recommended (or you can try to mortgage your properties but it won't work.)" << endl;
+                    cout << "The bank has calculated that you can not pay rent even after mortgaging all properties. Declaring Bankruptcy is highly recommended (or you can try to mortgage your properties to no avail.)" << endl;
 
-                    getOwner()->addMoney(playerTotalPayableAssets);
                 } else {
                     getOwner()->addMoney(rent);
                     std::cout << p->getName() << " pays rent of $" << rent << " to " << getOwner()->getName() << "." << std::endl;

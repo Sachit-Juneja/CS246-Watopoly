@@ -1053,7 +1053,7 @@ void Board::handleCommand(const std::string &input) {
             std::cout << "You cannot declare bankruptcy at this time. You must be unable to pay a debt." << std::endl;
             return;
         }
-    
+
         // Determine creditor if applicable
         Player *creditor = nullptr;
         for (auto *b : allBuildings) {
