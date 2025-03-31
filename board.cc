@@ -486,8 +486,9 @@ void Board::loadGame(fstream& loadFile) {
 }
 
 void Board::transferAssets(Player *from, Player *to) {
-    for (auto *b : from->getBuildingsOwned()) {
-        b->addPlayer(to);
+    for (Buildings *b : from->getBuildingsOwned()) {
+        PropertyBuildingsNew *pb = dynamic_cast<PropertyBuildingsNew *>(b);
+        pb->setOwner(to);
         to->addBuilding(b);
         std::cout << b->getName() << " transferred to " << to->getName() << "." << std::endl;
     }
@@ -609,6 +610,8 @@ void Board::gameLoop() {
                 
             } else if (firstWord == "all") {
                 
+            } else if (firstWord == "save") {
+
             } else {
                 continue; // Skip the command if not valid
             }
