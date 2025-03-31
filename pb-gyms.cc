@@ -63,10 +63,13 @@ void PBGyms::event(Player *p, std::vector<Player *> allPlayers, int rollTotal) {
                 if (playerTotalPayableAssets < rent) {
 
                     cout << "The bank has calculated that you can not pay rent even after mortgaging all properties. Declaring Bankruptcy is highly recommended (or you can try to mortgage your properties to no avail.)" << endl;
-                    
+
                 } else {
+                    
+                    cout << "The bank has calculated that you can afford rent after mortgaging: " << p->getName() << " pays rent of $" << rent << " to " << getOwner()->getName() << " (You must now choose what to mortgage - highly recommended, or go bankrupt - not recommended)." << endl;
+
                     getOwner()->addMoney(rent);
-                    std::cout << p->getName() << " pays rent of $" << rent << " to " << getOwner()->getName() << "." << std::endl;
+
                 }
             } else {
                 getOwner()->addMoney(rent);
