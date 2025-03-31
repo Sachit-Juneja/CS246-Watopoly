@@ -491,6 +491,12 @@ void Board::transferAssets(Player *from, Player *to) {
         to->addBuilding(b);
         std::cout << b->getName() << " transferred to " << to->getName() << "." << std::endl;
     }
+    // Transfer TimCups
+    while (from->getTimCups() > 0) {
+        from->setTimCups(from->getTimCups()-1);
+        to->setTimCups(to->getTimCups()+1);
+    }
+
     to->addMoney(from->getMoney());
     from->addMoney(-from->getMoney());
     from->clearProperties();
