@@ -73,4 +73,5 @@ void Auction::start(PropertyBuildingsNew *property, const std::vector<Player *> 
         property->setOwner(nullptr); // No bids were made so owner is BANK (this is important when someone is bankrupt so the property can be returned to the bank)
         std::cout << "No valid bids. Property remains unowned." << std::endl;
     }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
