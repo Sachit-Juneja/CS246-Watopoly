@@ -700,6 +700,7 @@ void Board::handleCommand(const std::string &input) {
                 b->event(p);
                 if (p->getTimsLine() == 1) {
                     notifyObservers(); // Notify observers only if just sent to tims line
+                    cout << "You have been sent to DC Tims Line." << endl;
                 }
             }
         }
