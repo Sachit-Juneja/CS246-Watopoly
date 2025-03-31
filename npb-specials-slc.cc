@@ -33,10 +33,9 @@ void NPBSpecialsSLC::event(Player *p) {
         else if (outcome <= 19) moveVal = 2;
         else moveVal = 3;
 
-        int newPos = p->move(moveVal);
+        p->move(moveVal);
         std::cout << p->getName() << " moves " << moveVal 
-                  << " spaces to square " << newPos << "." << std::endl;
-
+                  << " spaces." << std::endl;
         // Trigger event on newPos via Board
     }
 }
