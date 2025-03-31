@@ -70,6 +70,7 @@ void Auction::start(PropertyBuildingsNew *property, const std::vector<Player *> 
         property->setOwner(highestBidder);
         std::cout << highestBidder->getName() << " wins the auction for $" << highestBid << "!" << std::endl;
     } else {
+        property->setOwner(nullptr); // No bids were made so owner is BANK (this is important when someone is bankrupt so the property can be returned to the bank)
         std::cout << "No valid bids. Property remains unowned." << std::endl;
     }
 }
