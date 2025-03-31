@@ -709,9 +709,10 @@ void Board::handleCommand(const std::string &input) {
 
     if (cmd == "roll") {
         if (hasRolled) {
+            cout << "You have already rolled! Please use 'next' to end your turn.\n" << endl;
             return;
         }
-    
+        
         int total = dice.roll();
         int die1 = dice.getDie1();
         int die2 = dice.getDie2();
