@@ -515,13 +515,13 @@ void Board::transferAssets(Player *from, Player *to) {
                 }
             }
             cin.ignore(1000, '\n'); // clear inputs
-            
+
             if (choice == 1) {
                 // Deduct 10% of building cost to keep mortgaged building
                 cout << "You have decided to keep the mortgaged building " << b->getName() << "." << endl;
                 int tenPercent = pb->getCost() * 0.1;
                 to->addMoney(-tenPercent);
-                cout << "You have paid 10% of the mortgage value: " << tenPercent << endl;
+                cout << "You have paid 10% of the mortgage value: $" << tenPercent << endl;
             } else if (choice == 2) {
                 // Give building back to the bank if not keeping
                 pb->setOwner(nullptr);
@@ -561,6 +561,8 @@ void Board::returnAssetsToBank(Player *p) {
 }
 
 void Board::removePlayer(Player *p) {
+    doublesRolled = 0;
+    hasRolled = 0;
     auto it = std::find(allPlayers.begin(), allPlayers.end(), p);
     if (it != allPlayers.end()) {
         std::cout << p->getName() << " has been removed from the game." << std::endl;
@@ -1172,7 +1174,7 @@ void Board::handleCommand(const std::string &input) {
             std::cout << "All assets returned to the bank." << std::endl;
             returnAssetsToBank(p);
         }
-    
+
         // Remove the player from the game
         removePlayer(p);
     }
