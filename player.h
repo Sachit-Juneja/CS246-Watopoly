@@ -18,7 +18,7 @@ class Player {
     int charNum; // 1-8
     int currentPosition = 0;
     int money = 1500;
-    int timCups = 0; 
+    int timCups = 0; // Note that there is also a global count for all tim cups on the board in NPBSpecials class. 
     int ownedResidences;
     int ownedGyms;
     bool bankrupt = false;

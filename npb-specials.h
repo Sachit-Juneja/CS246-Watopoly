@@ -17,7 +17,7 @@ public:
     bool tryAwardCup(Player *p);
 
     // Manually adds a cup to the global count (if < 4). Used internally.
-    bool addcup();
+    static bool addcup();
 
     // Can more cups be issued? (Check active < 4)
     bool checkcups() const;
