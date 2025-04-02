@@ -103,7 +103,7 @@ void PBAcademicBuilding::event(Player *p, std::vector<Player *> allPlayers) {
             p->addMoney(-rent);
             if (p->getMoney() < 0) {
                 int playerTotalPayableAssets = p->getMoney() + ((p->getTotalAssets() - p->getMoney()) / 2);
-                if (playerTotalPayableAssets < rent) {
+                if (playerTotalPayableAssets < 0) {
 
                     cout << "The bank has calculated that you can not pay rent even after mortgaging all properties. Declaring Bankruptcy is highly recommended (or you can try to mortgage your properties to no avail.)" << endl;
 

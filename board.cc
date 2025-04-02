@@ -490,7 +490,7 @@ void Board::transferAssets(Player *from, Player *to) {
         PropertyBuildingsNew *pb = dynamic_cast<PropertyBuildingsNew *>(b);
         // Check if the building is mortgaged
         if (pb->isMortgaged()) {
-            cout << "Do you want to keep mortgaged property? You must pay 10% upfront if so." << endl;
+            cout << "Do you want to keep mortgaged property " << b->getName() << "? You must pay 10% of the building cost if so." << endl;
             cout << "1. Yes" << endl;
             cout << "2. No" << endl;
 
@@ -514,7 +514,8 @@ void Board::transferAssets(Player *from, Player *to) {
                     cout << "Invalid choice. Please enter 1 or 2." << endl;
                 }
             }
-
+            cin.ignore(1000, '\n'); // clear inputs
+            
             if (choice == 1) {
                 // Deduct 10% of building cost to keep mortgaged building
                 cout << "You have decided to keep the mortgaged building " << b->getName() << "." << endl;
@@ -524,7 +525,7 @@ void Board::transferAssets(Player *from, Player *to) {
             } else if (choice == 2) {
                 // Give building back to the bank if not keeping
                 pb->setOwner(nullptr);
-                std::cout << "You have decided to not keep the mortgaged building " b->getName() << ". Ownership has been transferred to the bank." << std::endl;
+                std::cout << "You have decided to not keep the mortgaged building " << b->getName() << ". Ownership has been transferred to the bank." << std::endl;
                 continue;
             } else {
                 cout << "Mortgage transfer error in transferAssets function." << endl;

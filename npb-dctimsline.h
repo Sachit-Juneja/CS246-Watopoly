@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "player.h"
 #include "nonpropertybuilding.h"
+#include "npb-specials.h"
 
 class DCTimsLine : public NonPropertyBuilding {
 
