@@ -221,7 +221,7 @@ void Board::newGame() {
                 cout << "Error - EOF detected on character number selection. Exiting game." << endl;
                 exit(0);
             } else {
-                cout << "Invalid input. Please enter a number between 1 and 8." << endl;
+                cout << "Invalid input. Please enter a number between 2 and 6." << endl;
                 cin.clear();
                 cin.ignore(1000, '\n');
                 continue;
@@ -488,10 +488,55 @@ void Board::loadGame(fstream& loadFile) {
 void Board::transferAssets(Player *from, Player *to) {
     for (Buildings *b : from->getBuildingsOwned()) {
         PropertyBuildingsNew *pb = dynamic_cast<PropertyBuildingsNew *>(b);
+        // Check if the building is mortgaged
+        if (pb->isMortgaged()) {
+            cout << "Do you want to keep mortgaged property " << b->getName() << "? You must pay 10% of the building cost if so." << endl;
+            cout << "1. Yes" << endl;
+            cout << "2. No" << endl;
+
+            int choice;
+            while (true) {
+                cin >> choice;
+                if (cin.fail()) {
+                    if (cin.eof()) {
+                        cout << "Error - EOF detected on character number selection. Exiting game." << endl;
+                        exit(0);
+                    } else {
+                        cout << "Invalid input. Please enter 1 or 2." << endl;
+                        cin.clear();
+                        cin.ignore(1000, '\n');
+                        continue;
+                    }
+                }
+                if (choice == 1 || choice == 2) {
+                    break;
+                } else {
+                    cout << "Invalid choice. Please enter 1 or 2." << endl;
+                }
+            }
+            cin.ignore(1000, '\n'); // clear inputs
+
+            if (choice == 1) {
+                // Deduct 10% of building cost to keep mortgaged building
+                cout << "You have decided to keep the mortgaged building " << b->getName() << "." << endl;
+                int tenPercent = pb->getCost() * 0.1;
+                to->addMoney(-tenPercent);
+                cout << "You have paid 10% of the mortgage value: $" << tenPercent << endl;
+            } else if (choice == 2) {
+                // Give building back to the bank if not keeping
+                pb->setOwner(nullptr);
+                std::cout << "You have decided to not keep the mortgaged building " << b->getName() << ". Ownership has been transferred to the bank." << std::endl;
+                continue;
+            } else {
+                cout << "Mortgage transfer error in transferAssets function." << endl;
+            }
+        }
+
         pb->setOwner(to);
         to->addBuilding(b);
         std::cout << b->getName() << " transferred to " << to->getName() << "." << std::endl;
     }
+
     // Transfer TimCups
     while (from->getTimCups() > 0) {
         from->setTimCups(from->getTimCups()-1);
@@ -516,6 +561,8 @@ void Board::returnAssetsToBank(Player *p) {
 }
 
 void Board::removePlayer(Player *p) {
+    doublesRolled = 0;
+    hasRolled = 0;
     auto it = std::find(allPlayers.begin(), allPlayers.end(), p);
     if (it != allPlayers.end()) {
         std::cout << p->getName() << " has been removed from the game." << std::endl;
@@ -611,6 +658,8 @@ void Board::gameLoop() {
             } else if (firstWord == "all") {
                 
             } else if (firstWord == "save") {
+
+            } else if (firstWord == "trade") {
 
             } else {
                 continue; // Skip the command if not valid
@@ -908,6 +957,36 @@ void Board::handleCommand(const std::string &input) {
                 std::cout << "Invalid ownership.\n";
                 return;
             }
+
+            // Check if properties are academic and part of monopoly
+            bool hasimprovement = false;
+            PBAcademicBuilding *receiveAcademicBuilding = dynamic_cast<PBAcademicBuilding *>(propReceive);
+            if (receiveAcademicBuilding && other->hasMonopoly(receiveAcademicBuilding->getFaculty())) {
+                for (Buildings *b : other->getBuildingsOwned()) { // Pretty sure it's better if getBuildingsOwned() returns a propertyBuilding, but I'll keep it this way for now.
+                    PBAcademicBuilding *iterateAcademicBuilding = dynamic_cast<PBAcademicBuilding *>(b);
+
+                    if ((iterateAcademicBuilding->getImprovementLevel() > 0) && (iterateAcademicBuilding->getFaculty() == receiveAcademicBuilding->getFaculty())) {
+                        hasimprovement = true;
+                        break;
+                    }
+                }
+            }
+            PBAcademicBuilding *giveAcademicBuilding = dynamic_cast<PBAcademicBuilding *>(propGive);
+            if (giveAcademicBuilding && p->hasMonopoly(giveAcademicBuilding->getFaculty())) {
+                for (Buildings *b : p->getBuildingsOwned()) { // Pretty sure it's better if getBuildingsOwned() returns a propertyBuilding, but I'll keep it this way for now.
+                    PBAcademicBuilding *iterateAcademicBuilding = dynamic_cast<PBAcademicBuilding *>(b);
+
+                    if ((iterateAcademicBuilding->getImprovementLevel() > 0) && (iterateAcademicBuilding->getFaculty() == giveAcademicBuilding->getFaculty())) {
+                        hasimprovement = true;
+                        break;
+                    }
+                }
+            }
+
+            if (hasimprovement) {
+                cout << "You cannot trade a building in a monopoly that has improvements. Please sell all improvements on the monopoly first." << endl;
+            }
+
             propGive->setOwner(other);
             propReceive->setOwner(p);
         }
@@ -1095,7 +1174,7 @@ void Board::handleCommand(const std::string &input) {
             std::cout << "All assets returned to the bank." << std::endl;
             returnAssetsToBank(p);
         }
-    
+
         // Remove the player from the game
         removePlayer(p);
     }

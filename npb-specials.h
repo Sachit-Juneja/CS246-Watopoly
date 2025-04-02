@@ -23,7 +23,7 @@ public:
     bool checkcups() const;
 
     // Remove a cup from the global count (when player uses it)
-    void removecup();
+    static void removecup();
 };
 
 #endif
