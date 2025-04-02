@@ -384,6 +384,11 @@ void Board::loadGame(fstream& loadFile) {
         allPlayers.emplace_back(new Player(charNum, realName));
         Player* p = allPlayers.back();
         p->setTimCups(timCups);
+        
+        for (int j = 0; j < timCups; j++) {
+            NPBSpecials::addcup(); // Add cup to global count
+        }
+
         p->addMoney(money - 1500); // subtract the starting amount
         p->setPosition(position);
 
