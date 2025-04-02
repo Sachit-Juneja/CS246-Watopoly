@@ -35,6 +35,7 @@ void DCTimsLine::event(Player * p) {
 
             if (numCups >= 1) {
                 p->setTimCups(numCups - 1);
+                NPBSpecials::removecup(); // Remove a cup from global count
                 p->setTimsLine(0);
                 break;
             } else {

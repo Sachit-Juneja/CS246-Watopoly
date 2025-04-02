@@ -612,6 +612,8 @@ void Board::gameLoop() {
                 
             } else if (firstWord == "save") {
 
+            } else if (firstWord == "trade") {
+
             } else {
                 continue; // Skip the command if not valid
             }
@@ -908,6 +910,36 @@ void Board::handleCommand(const std::string &input) {
                 std::cout << "Invalid ownership.\n";
                 return;
             }
+
+            // Check if properties are academic and part of monopoly
+            bool hasimprovement = false;
+            PBAcademicBuilding *receiveAcademicBuilding = dynamic_cast<PBAcademicBuilding *>(propReceive);
+            if (receiveAcademicBuilding && other->hasMonopoly(receiveAcademicBuilding->getFaculty())) {
+                for (Buildings *b : other->getBuildingsOwned()) { // Pretty sure it's better if getBuildingsOwned() returns a propertyBuilding, but I'll keep it this way for now.
+                    PBAcademicBuilding *iterateAcademicBuilding = dynamic_cast<PBAcademicBuilding *>(b);
+
+                    if ((iterateAcademicBuilding->getImprovementLevel() > 0) && (iterateAcademicBuilding->getFaculty() == receiveAcademicBuilding->getFaculty())) {
+                        hasimprovement = true;
+                        break;
+                    }
+                }
+            }
+            PBAcademicBuilding *giveAcademicBuilding = dynamic_cast<PBAcademicBuilding *>(propGive);
+            if (giveAcademicBuilding && p->hasMonopoly(giveAcademicBuilding->getFaculty())) {
+                for (Buildings *b : p->getBuildingsOwned()) { // Pretty sure it's better if getBuildingsOwned() returns a propertyBuilding, but I'll keep it this way for now.
+                    PBAcademicBuilding *iterateAcademicBuilding = dynamic_cast<PBAcademicBuilding *>(b);
+
+                    if ((iterateAcademicBuilding->getImprovementLevel() > 0) && (iterateAcademicBuilding->getFaculty() == giveAcademicBuilding->getFaculty())) {
+                        hasimprovement = true;
+                        break;
+                    }
+                }
+            }
+
+            if (hasimprovement) {
+                cout << "You cannot trade a building in a monopoly that has improvements. Please sell all improvements on the monopoly first." << endl;
+            }
+
             propGive->setOwner(other);
             propReceive->setOwner(p);
         }
