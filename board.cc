@@ -221,7 +221,7 @@ void Board::newGame() {
                 cout << "Error - EOF detected on character number selection. Exiting game." << endl;
                 exit(0);
             } else {
-                cout << "Invalid input. Please enter a number between 1 and 8." << endl;
+                cout << "Invalid input. Please enter a number between 2 and 6." << endl;
                 cin.clear();
                 cin.ignore(1000, '\n');
                 continue;
@@ -488,10 +488,54 @@ void Board::loadGame(fstream& loadFile) {
 void Board::transferAssets(Player *from, Player *to) {
     for (Buildings *b : from->getBuildingsOwned()) {
         PropertyBuildingsNew *pb = dynamic_cast<PropertyBuildingsNew *>(b);
+        // Check if the building is mortgaged
+        if (pb->isMortgaged()) {
+            cout << "Do you want to keep mortgaged property? You must pay 10% upfront if so." << endl;
+            cout << "1. Yes" << endl;
+            cout << "2. No" << endl;
+
+            int choice;
+            while (true) {
+                cin >> choice;
+                if (cin.fail()) {
+                    if (cin.eof()) {
+                        cout << "Error - EOF detected on character number selection. Exiting game." << endl;
+                        exit(0);
+                    } else {
+                        cout << "Invalid input. Please enter 1 or 2." << endl;
+                        cin.clear();
+                        cin.ignore(1000, '\n');
+                        continue;
+                    }
+                }
+                if (choice == 1 || choice == 2) {
+                    break;
+                } else {
+                    cout << "Invalid choice. Please enter 1 or 2." << endl;
+                }
+            }
+
+            if (choice == 1) {
+                // Deduct 10% of building cost to keep mortgaged building
+                cout << "You have decided to keep the mortgaged building " << b->getName() << "." << endl;
+                int tenPercent = pb->getCost() * 0.1;
+                to->addMoney(-tenPercent);
+                cout << "You have paid 10% of the mortgage value: " << tenPercent << endl;
+            } else if (choice == 2) {
+                // Give building back to the bank if not keeping
+                pb->setOwner(nullptr);
+                std::cout << "You have decided to not keep the mortgaged building " b->getName() << ". Ownership has been transferred to the bank." << std::endl;
+                continue;
+            } else {
+                cout << "Mortgage transfer error in transferAssets function." << endl;
+            }
+        }
+
         pb->setOwner(to);
         to->addBuilding(b);
         std::cout << b->getName() << " transferred to " << to->getName() << "." << std::endl;
     }
+
     // Transfer TimCups
     while (from->getTimCups() > 0) {
         from->setTimCups(from->getTimCups()-1);
